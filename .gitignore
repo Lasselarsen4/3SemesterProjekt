@@ -102,4 +102,12 @@ $RECYCLE.BIN/
 bin/
 obj/
 
-hehe
+# Ignore cache files
+*.cache
+
+# Ignore JSON files
+*.json
+
+# Ignore props files
+*.props
+
