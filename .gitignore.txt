@@ -1,0 +1,19 @@
+# Visual Studio / Rider
+*.suo
+*.user
+*.vscode/
+*.vs/
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# NuGet packages
+*.nuget.config
+
+# Rider specific
+.idea/
+
+# OS or Editor files
+Thumbs.db
+.DS_Store
