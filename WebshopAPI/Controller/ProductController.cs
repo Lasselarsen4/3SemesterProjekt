@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Model;
 
-namespace WebshopAPI.Controller;
+namespace WebshopAPI.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
