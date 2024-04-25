@@ -1,6 +1,6 @@
 ﻿namespace Model;
 
-public class Equipment
+public class Equipment : Product
 {
     
 }
