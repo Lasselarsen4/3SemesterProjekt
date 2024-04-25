@@ -19,6 +19,7 @@ namespace WebshopAPI.Controller // Corrected the namespace from Controller to Co
         public ActionResult<IEnumerable<Product>> Get()
         {
             return Ok(_products);
+            
         }
     }
 }
