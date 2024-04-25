@@ -1,6 +1,6 @@
 ﻿namespace Model;
 
-public class Supplements
+public class Supplements : Product
 {
     
 }

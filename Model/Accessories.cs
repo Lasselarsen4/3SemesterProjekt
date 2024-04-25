@@ -1,6 +1,6 @@
 ﻿namespace Model;
 
-public class Accessories
+public class Accessories : Product
 {
     
 }
