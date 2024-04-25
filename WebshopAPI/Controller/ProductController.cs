@@ -5,8 +5,7 @@ namespace WebshopAPI.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
-
-    public class ProductController
+    public class ProductController : ControllerBase
     {
         private readonly List<Product> _products = new List<Product>
         {
@@ -34,3 +33,4 @@ namespace WebshopAPI.Controller
         }
     }
 }
+

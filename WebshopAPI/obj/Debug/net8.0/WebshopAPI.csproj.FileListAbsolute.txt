@@ -32,3 +32,5 @@ C:\Users\lasse\RiderProjects\3SemesterProjekt\WebshopAPI\obj\Debug\net8.0\refint
 C:\Users\lasse\RiderProjects\3SemesterProjekt\WebshopAPI\obj\Debug\net8.0\WebshopAPI.pdb
 C:\Users\lasse\RiderProjects\3SemesterProjekt\WebshopAPI\obj\Debug\net8.0\WebshopAPI.genruntimeconfig.cache
 C:\Users\lasse\RiderProjects\3SemesterProjekt\WebshopAPI\obj\Debug\net8.0\ref\WebshopAPI.dll
+C:\Users\lasse\RiderProjects\3SemesterProjekt\WebshopAPI\bin\Debug\net8.0\Model.dll
+C:\Users\lasse\RiderProjects\3SemesterProjekt\WebshopAPI\bin\Debug\net8.0\Model.pdb
