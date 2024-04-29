@@ -2,7 +2,7 @@
 using Model;
 
 
-namespace WebshopAPI.Controller // Corrected the namespace from Controller to Controllers
+namespace WebshopAPI.Controller 
 {
     [ApiController]
     [Route("api/[controller]")]
