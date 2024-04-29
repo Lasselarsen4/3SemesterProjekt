@@ -15,4 +15,8 @@
       <ProjectReference Include="..\Model\Model.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Controller\Properties\launchSettings.json" />
+    </ItemGroup>
+
 </Project>
