@@ -1,4 +1,6 @@
-﻿public class OrderLine
+﻿namespace Model;
+
+public class OrderLine
 {
     public OrderLine(int quantity)
     {
