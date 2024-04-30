@@ -1,13 +1,25 @@
-﻿namespace Model;
+﻿using System;
 
-public class Supplements : Product
+namespace Model
 {
-    public string Creatine { get; set; }
-    public string ProteinPowder { get; set; }
-    public string ProteinBar { get; set; }
-
-    public override string ToString()
+    public class Supplements : Product
     {
-        return $"Creatine: {Creatine}, Protein Powder: {ProteinPowder}, Protein Bar: {ProteinBar}, {base.ToString()}";
+        public Supplements(int productId, string productName, decimal productPrice, string productDescription,
+            string creatine, string proteinPowder, string proteinBar) 
+            : base(productId, productName, productPrice, productDescription)
+        {
+            Creatine = creatine;
+            ProteinPowder = proteinPowder;
+            ProteinBar = proteinBar;
+        }
+
+        public string Creatine { get; set; }
+        public string ProteinPowder { get; set; }
+        public string ProteinBar { get; set; }
+
+        public override string ToString()
+        {
+            return $"Creatine: {Creatine}, Protein Powder: {ProteinPowder}, Protein Bar: {ProteinBar}, {base.ToString()}";
+        }
     }
 }
