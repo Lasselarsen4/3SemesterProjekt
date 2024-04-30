@@ -1,13 +1,20 @@
-﻿namespace Model;
+﻿using System;
 
-public class Order
+namespace Model
 {
-    public Order(int orderId, DateTime orderDate)
+    public class Order
     {
-        OrderId = orderId;
-        OrderDate = orderDate;
-    }
+        public Order(int orderId, DateTime orderDate, DateTime deliveryDate, decimal totalPrice)
+        {
+            OrderId = orderId;
+            OrderDate = orderDate;
+            TotalPrice = totalPrice;
+            DeliveryDate = deliveryDate;
+        }
 
-    public int OrderId { get; set; }
-    public DateTime OrderDate { get; set; }
+        public int OrderId { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
+        public decimal TotalPrice { get; set; }
+    }
 }
