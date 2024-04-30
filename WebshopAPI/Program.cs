@@ -1,46 +1,44 @@
-using System;
-using System.Data;
-using System.Data.SqlClient;
-using WebshopAPI.Database;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace WebshopAPI
+// Add services to the container.
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    class Program
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+var summaries = new[]
+{
+    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+};
+
+app.MapGet("/weatherforecast", () =>
     {
-        static void Main(string[] args)
-        {
-            TestDatabaseConnection();
-        }
+        var forecast = Enumerable.Range(1, 5).Select(index =>
+                new WeatherForecast
+                (
+                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                    Random.Shared.Next(-20, 55),
+                    summaries[Random.Shared.Next(summaries.Length)]
+                ))
+            .ToArray();
+        return forecast;
+    })
+    .WithName("GetWeatherForecast")
+    .WithOpenApi();
 
-        static void TestDatabaseConnection()
-        {
-            // Get an instance of the DatabaseConnection
-            DatabaseConnection dbConnection = DatabaseConnection.GetInstance();
+app.Run();
 
-            try
-            {
-                // Open the database connection
-                SqlConnection connection = dbConnection.OpenConnection();
-
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    Console.WriteLine("Database connection opened successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("Failed to open database connection.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            finally
-            {
-                // Close the database connection
-                dbConnection.CloseConnection();
-                Console.WriteLine("Database connection closed.");
-            }
-        }
-    }
+record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+{
+    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
