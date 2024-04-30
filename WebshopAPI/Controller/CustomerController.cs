@@ -9,11 +9,11 @@ namespace WebshopAPI.Controller
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-        private readonly List<Customer> _customers = new List<Customer>
+        private readonly List<Customer> _customers;
+        public CustomerController()
         {
-            new Customer("John Doe", "john@example.com", "123 Main St", 123456789),
-            new Customer("Jane Smith", "jane@example.com", "456 Elm St", 987654321)
-        };
+            _customers = new List<Customer>();
+        }
 
         [HttpGet]
         public ActionResult<IEnumerable<Customer>> Get()
@@ -35,8 +35,15 @@ namespace WebshopAPI.Controller
         [HttpPost]
         public ActionResult<Customer> Post([FromBody] Customer customer)
         {
-            // In a real application, you might validate the customer data before adding it
+            if (customer == null)
+            {
+                return BadRequest("Customer object is null");
+            }
+            
+            customer.Id = _customers.Count + 1;
+
             _customers.Add(customer);
+
             return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
         }
 
@@ -48,7 +55,6 @@ namespace WebshopAPI.Controller
             {
                 return NotFound();
             }
-            // Update the existing customer properties
             existingCustomer.Name = updatedCustomer.Name;
             existingCustomer.Email = updatedCustomer.Email;
             existingCustomer.Address = updatedCustomer.Address;
