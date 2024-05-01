@@ -24,7 +24,7 @@ namespace WebshopAPI.Controller
         [HttpGet("{id}")]
         public ActionResult<Customer> Get(int id)
         {
-            var customer = _customers.Find(c => c.Id == id);
+            var customer = _customers.Find(c => c.CustomerId == id);
             if (customer == null)
             {
                 return NotFound();
@@ -40,17 +40,17 @@ namespace WebshopAPI.Controller
                 return BadRequest("Customer object is null");
             }
             
-            customer.Id = _customers.Count + 1;
+            customer.CustomerId = _customers.Count + 1;
 
             _customers.Add(customer);
 
-            return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
+            return CreatedAtAction(nameof(Get), new { id = customer.CustomerId }, customer);
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Customer updatedCustomer)
         {
-            var existingCustomer = _customers.Find(c => c.Id == id);
+            var existingCustomer = _customers.Find(c => c.CustomerId == id);
             if (existingCustomer == null)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace WebshopAPI.Controller
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var customerToRemove = _customers.Find(c => c.Id == id);
+            var customerToRemove = _customers.Find(c => c.CustomerId == id);
             if (customerToRemove == null)
             {
                 return NotFound();
