@@ -22,7 +22,7 @@ namespace WebshopAPI
                         Console.WriteLine("Database connection opened successfully.");
 
                         // Example query: select all rows from the TestTable
-                        string query = "SELECT * FROM TestTable";
+                        string query = "SELECT * FROM Order";
 
                         // Create a SqlCommand object with the query and connection
                         using (SqlCommand command = new SqlCommand(query, connection))
