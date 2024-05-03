@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Model;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace WebshopAPI.Controllers
+
+namespace WebshopAPI.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
