@@ -16,7 +16,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         return View();
-    }
+    }   
 
     public IActionResult Privacy()
     {
@@ -28,6 +28,15 @@ public class HomeController : Controller
         return View();
     }
     
+    public IActionResult Accessories()
+    {
+        return View();
+    }
+    
+    public IActionResult Supplements()
+    {
+        return View();
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
