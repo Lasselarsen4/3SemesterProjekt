@@ -9,29 +9,27 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-image: url('background.jpg'); /* Replace 'background.jpg' with the path to your image */
-            background-size: cover;
-            background-position: center;
-            color: #fff; /* Adjust text color for better contrast with background */
+            background-color: #f4f4f4;
         }
         .container {
-            text-align: left; /* Align text to the left */
-            padding: 20px; /* Add padding for better spacing */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
         }
         .logo {
             font-size: 2rem;
             margin-bottom: 1rem;
+            color: #333;
         }
         .navigation {
             margin-bottom: 2rem;
         }
         .navigation a {
-            margin-right: 1rem; /* Add right margin to separate links */
+            margin: 0 1rem;
             text-decoration: none;
+            color: #555;
         }
         .hero {
             margin-bottom: 2rem;
@@ -39,9 +37,11 @@
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
+            color: #333;
         }
         .hero p {
             font-size: 1.2rem;
+            color: #555;
         }
         .cta {
             margin-bottom: 2rem;
@@ -65,9 +65,9 @@
         Fitness Shop
     </div>
     <div class="navigation">
-        <a href="#">WebApplication1</a>
         <a href="#">Home</a>
-        <a href="#">Privacy</a>
+        <a href="#">Products</a>
+        <a href="#">Contact</a>
     </div>
     <div class="hero">
         <h1>Welcome to Fitness Shop</h1>
