@@ -1,8 +1,81 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Webshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('background.jpg'); /* Replace 'background.jpg' with the path to your image */
+            background-size: cover;
+            background-position: center;
+            color: #fff; /* Adjust text color for better contrast with background */
+        }
+        .container {
+            text-align: left; /* Align text to the left */
+            padding: 20px; /* Add padding for better spacing */
+        }
+        .logo {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .navigation {
+            margin-bottom: 2rem;
+        }
+        .navigation a {
+            margin-right: 1rem; /* Add right margin to separate links */
+            text-decoration: none;
+        }
+        .hero {
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+        }
+        .cta {
+            margin-bottom: 2rem;
+        }
+        .cta a {
+            padding: 1rem 2rem;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .cta a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">
+        Fitness Shop
+    </div>
+    <div class="navigation">
+        <a href="#">WebApplication1</a>
+        <a href="#">Home</a>
+        <a href="#">Privacy</a>
+    </div>
+    <div class="hero">
+        <h1>Welcome to Fitness Shop</h1>
+        <p>Your destination for all fitness essentials</p>
+    </div>
+    <div class="cta">
+        <a href="#">Explore our collection</a>
+    </div>
 </div>
+</body>
+</html>
