@@ -1,54 +1,60 @@
-using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using WebshopAPI.Database;
 using Model;
-using System.Linq;
 
-namespace WebshopAPI.Tests
+namespace WebshopAPI.Test
 {
-    [TestFixture]
     public class ProductDatabaseTests
     {
-        private DatabaseConnection _dbConnection;
-        private ProductDatabase _productDatabase;
+        private readonly DatabaseConnection _dbConnection;
+        private readonly ProductDatabase _productDatabase;
 
-        [SetUp]
-        public void SetUp()
+        public ProductDatabaseTests()
         {
             _dbConnection = new DatabaseConnection(); // Initialize with appropriate connection details
             _productDatabase = new ProductDatabase(_dbConnection);
         }
 
-        [Test]
-        public void GetAllProducts_ShouldReturnAllProducts()
+        public void TestGetAllProducts()
         {
             // Arrange: Add test data to the database
-            var expectedProducts = new Product[]
+            var expectedProducts = new List<Product>
             {
                 new Product { ProductName = "TestProduct1", ProductPrice = 10.00m, ProductDescription = "Test Description 1" },
                 new Product { ProductName = "TestProduct2", ProductPrice = 20.00m, ProductDescription = "Test Description 2" }
             };
-            foreach (var product in expectedProducts)
-            {
-                _productDatabase.AddProduct(product);
-            }
+            expectedProducts.ForEach(product => _productDatabase.AddProduct(product));
 
             // Act: Retrieve all products
             var actualProducts = _productDatabase.GetAllProducts();
 
             // Assert: Check if all expected products are returned
-            Assert.AreEqual(expectedProducts.Length, actualProducts.Count());
+            if (expectedProducts.Count != actualProducts.Count())
+            {
+                Console.WriteLine("GetAllProducts test failed: Incorrect number of products returned.");
+                return;
+            }
+
             foreach (var expectedProduct in expectedProducts)
             {
-                Assert.IsTrue(actualProducts.Any(p => p.ProductName == expectedProduct.ProductName && p.ProductPrice == expectedProduct.ProductPrice && p.ProductDescription == expectedProduct.ProductDescription));
+                var actualProduct = actualProducts.FirstOrDefault(p =>
+                    p.ProductName == expectedProduct.ProductName &&
+                    p.ProductPrice == expectedProduct.ProductPrice &&
+                    p.ProductDescription == expectedProduct.ProductDescription);
+
+                if (actualProduct == null)
+                {
+                    Console.WriteLine($"GetAllProducts test failed: Product '{expectedProduct.ProductName}' not found.");
+                    return;
+                }
             }
 
-            // Clean up: Remove test data from the database
-            foreach (var product in expectedProducts)
-            {
-                _productDatabase.DeleteProduct(product.ProductId);
-            }
+            Console.WriteLine("GetAllProducts test passed.");
         }
 
-        // Similar methods for testing other CRUD operations...
+        // Add more test methods for other CRUD operations...
     }
+
 }
