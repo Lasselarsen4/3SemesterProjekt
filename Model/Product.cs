@@ -10,6 +10,11 @@
             ProductDescription = productDescription;
         }
 
+        public Product()
+        {
+            throw new NotImplementedException();
+        }
+
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }

@@ -40,7 +40,6 @@ namespace WebshopAPI.Controller
             }
 
             // Generate a unique ID for the new order line
-            // Add any additional logic here if needed
 
             _orderLines.Add(orderLine);
 

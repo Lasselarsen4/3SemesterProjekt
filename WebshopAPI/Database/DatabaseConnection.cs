@@ -14,7 +14,7 @@ namespace WebshopAPI.Database
 
         private SqlConnection _connection = null;
 
-        private DatabaseConnection() { }
+        internal DatabaseConnection() { }
 
         public static DatabaseConnection GetInstance()
         {
