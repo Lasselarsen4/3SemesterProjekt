@@ -1,13 +1,14 @@
+using Model;
 using System.Collections.Generic;
 
 namespace WebshopAPI.Database
 {
-    public interface IProductDB<T>
+    public interface IProductDB
     {
-        IEnumerable<T> GetAll();
-        T GetById(int id);
-        void Add(T item);
-        void Update(T item);
+        IEnumerable<Product> GetAll();
+        Product GetById(int id);
+        void Add(Product product);
+        void Update(Product product);
         void Delete(int id);
     }
 }

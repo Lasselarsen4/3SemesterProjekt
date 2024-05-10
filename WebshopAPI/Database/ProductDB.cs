@@ -4,7 +4,7 @@ using Model;
 
 namespace WebshopAPI.Database
 {
-    public class ProductDB
+    public class ProductDB : IProductDB
 
     {
     private readonly DatabaseConnection _dbConnection;
