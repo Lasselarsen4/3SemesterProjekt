@@ -4,22 +4,15 @@ using System.Data.SqlClient;
 
 namespace WebshopAPI.Database
 {
-    public class DatabaseConnection
+    public class DatabaseConnection : IDisposable
     {
-        private static readonly string _serverAddress = "hildur.ucn.dk";
-        private static readonly string _databaseName = "DMA-CSD-V23_10478742";
-        private static readonly string _userName = "DMA-CSD-V23_10478742";
-        private static readonly string _password = "Password1!";
-        private static readonly int _serverPort = 1433;
+        private readonly string _serverAddress = "hildur.ucn.dk";
+        private readonly string _databaseName = "DMA-CSD-V23_10478742";
+        private readonly string _userName = "DMA-CSD-V23_10478742";
+        private readonly string _password = "Password1!";
+        private readonly int _serverPort = 1433;
 
         private SqlConnection _connection = null;
-
-        internal DatabaseConnection() { }
-
-        public static DatabaseConnection GetInstance()
-        {
-            return new DatabaseConnection();
-        }
 
         public SqlConnection OpenConnection()
         {
@@ -34,9 +27,8 @@ namespace WebshopAPI.Database
                 }
                 catch (SqlException e)
                 {
-                    Console.Error.WriteLine($"Could not connect to database {_databaseName} @ {_serverAddress}:{_serverPort} as user {_userName} using password ****");
-                    Console.WriteLine($"Connection string was: {connectionString.Replace(_password, "****")}");
-                    Console.WriteLine(e.ToString());
+                    LogError(e, connectionString);
+                    throw; // Rethrow the exception after logging
                 }
             }
             return _connection;
@@ -50,6 +42,20 @@ namespace WebshopAPI.Database
                 _connection.Dispose();
                 _connection = null;
             }
+        }
+
+        private void LogError(SqlException exception, string connectionString)
+        {
+            // Logging the error to the console for now, consider using a logging framework
+            Console.Error.WriteLine($"Could not connect to database {_databaseName} @ {_serverAddress}:{_serverPort} as user {_userName} using password ****");
+            Console.WriteLine($"Connection string was: {connectionString.Replace(_password, "****")}");
+            Console.WriteLine(exception.ToString());
+        }
+
+        // Implement IDisposable to ensure proper disposal
+        public void Dispose()
+        {
+            CloseConnection();
         }
     }
 }

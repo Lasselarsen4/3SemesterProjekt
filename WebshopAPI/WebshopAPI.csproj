@@ -12,6 +12,7 @@
         <PackageReference Include="NUnit" Version="4.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
         <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+        <PackageReference Include="xunit" Version="2.8.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,10 +21,6 @@
 
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Controller\Properties\launchSettings.json" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Test\" />
     </ItemGroup>
 
 </Project>
