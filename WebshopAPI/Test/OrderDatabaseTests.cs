@@ -1,14 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Linq;
-using Model;
-using WebshopAPI.Database;
-using Xunit;
-
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using WebshopAPI.Database;
+﻿using WebshopAPI.Database;
 using Xunit;
 
 namespace WebshopAPI.Tests

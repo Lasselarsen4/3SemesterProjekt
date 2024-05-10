@@ -1,5 +1,3 @@
-using System.Linq;
-using Model;
 using WebshopAPI.Database;
 using Xunit;
 
