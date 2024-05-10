@@ -28,9 +28,4 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-app.MapControllerRoute(
-    name: "fitness",
-    pattern: "fitness/{action=Index}/{id?}",
-    defaults: new { controller = "Fitness" }); // Example route for fitness-related pages
-
 app.Run();
