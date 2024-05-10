@@ -1,7 +1,7 @@
 ﻿// ProductController.cs
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication1.Controllers
+namespace WebshopApplication.Controllers
 {
     public class ProductController : Controller
     {

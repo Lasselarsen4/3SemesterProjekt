@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
+using WebshopApplication.Models;
 
-namespace WebApplication1.Controllers
+namespace WebshopApplication.Controllers
 {
     public class SupplementsController : Controller
     {
