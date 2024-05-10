@@ -2,13 +2,14 @@
 {
     public class Customer
     {
-        public Customer(string name, string email, string address, int phone, int customerId)
+        public Customer(string firstName, string lastName, string email, string address, int phone, int customerId)
         {
-            Name = name;
+            CustomerId = customerId;
+            FirstName = firstName;
+            LastName = lastName;
             Email = email;
             Address = address;
             Phone = phone;
-            CustomerId = customerId;
         }
         
         public Customer()
@@ -16,10 +17,12 @@
            
         }
         
-        public string Name { get; set; }
+        public int CustomerId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
         public int Phone { get; set; }
-        public int CustomerId { get; set; }
+        
     }
 }

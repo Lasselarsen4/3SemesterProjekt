@@ -55,7 +55,8 @@ namespace WebshopAPI.Controller
             {
                 return NotFound();
             }
-            existingCustomer.Name = updatedCustomer.Name;
+            existingCustomer.FirstName = updatedCustomer.FirstName;
+            existingCustomer.LastName = updatedCustomer.LastName;
             existingCustomer.Email = updatedCustomer.Email;
             existingCustomer.Address = updatedCustomer.Address;
             existingCustomer.Phone = updatedCustomer.Phone;
