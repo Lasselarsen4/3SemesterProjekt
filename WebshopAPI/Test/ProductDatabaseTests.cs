@@ -9,7 +9,7 @@ namespace WebshopAPI.Tests
         public void GetAll_ReturnsAllProducts()
         {
             // Arrange
-            var dbConnection = new DatabaseConnection(); // Mock or use a testing database
+            var dbConnection = new DatabaseConnection(); 
             var productDatabase = new ProductDB(dbConnection);
 
             // Act
@@ -18,9 +18,8 @@ namespace WebshopAPI.Tests
             // Assert
             Assert.NotNull(products);
             Assert.NotEmpty(products);
-            Assert.Equal(1, products.Count()); // Adjust this based on your test data
+            Assert.Equal(1, products.Count());
         }
-
-        // Write similar tests for other methods like GetById, Add, Update, and Delete
+        
     }
 }

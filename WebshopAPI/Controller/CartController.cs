@@ -57,7 +57,5 @@ namespace WebshopAPI.Controller
                 return NotFound();
             }
         }
-
-        // Other CRUD operations for the cart can be added here as needed
     }
 }

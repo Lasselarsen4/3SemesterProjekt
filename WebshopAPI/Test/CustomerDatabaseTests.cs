@@ -9,7 +9,7 @@ namespace WebshopAPI.Tests
         public void GetAll_ReturnsAllCustomers()
         {
             // Arrange
-            var dbConnection = new DatabaseConnection(); // Mock or use a testing database
+            var dbConnection = new DatabaseConnection();
             var customerDatabase = new CustomerDB(dbConnection);
 
             // Act
@@ -18,9 +18,7 @@ namespace WebshopAPI.Tests
             // Assert
             Assert.NotNull(customers);
             Assert.NotEmpty(customers);
-            Assert.Equal(1, customers.Count()); // Adjust this based on your test data
+            Assert.Equal(1, customers.Count());
         }
-
-        // Write similar tests for other methods like GetById, Add, Update, and Delete
     }
 }
