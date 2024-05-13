@@ -1,7 +1,7 @@
 ﻿using WebshopAPI.Database;
 using Xunit;
 
-namespace WebshopAPI.Tests
+namespace WebshopAPI.Test
 {
     public class OrderDatabaseTests
     {

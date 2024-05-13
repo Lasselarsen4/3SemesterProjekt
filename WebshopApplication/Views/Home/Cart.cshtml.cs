@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebApplication1;
+namespace WebshopApplication;
 
 public class Cart : PageModel
 {
