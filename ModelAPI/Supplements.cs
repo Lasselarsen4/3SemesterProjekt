@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model
+namespace ModelAPI
 {
     public class Supplements : Product
     {

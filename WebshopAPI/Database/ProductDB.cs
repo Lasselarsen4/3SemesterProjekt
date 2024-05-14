@@ -1,5 +1,5 @@
 using System.Data.SqlClient;
-using Model;
+using ModelAPI;
 
 namespace WebshopAPI.Database
 {

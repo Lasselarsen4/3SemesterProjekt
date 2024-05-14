@@ -1,4 +1,4 @@
-﻿namespace Model
+﻿namespace ModelAPI
 {
     public class Accessories : Product
     {

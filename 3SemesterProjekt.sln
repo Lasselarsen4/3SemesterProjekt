@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebshopAPI", "WebshopAPI\WebshopAPI.csproj", "{FD716FB4-1F9B-42B0-84E6-1DACDC3BEE0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{E1EF9238-DCCB-4786-9410-D650FA7376B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelAPI", "ModelAPI\ModelAPI.csproj", "{E1EF9238-DCCB-4786-9410-D650FA7376B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebshopApplication", "WebshopApplication\WebshopApplication.csproj", "{F881AD5B-F92B-4756-ABB6-076F85229FA9}"
 EndProject

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Model;
+using ModelAPI;
 
 namespace WebshopAPI.Controller
 {

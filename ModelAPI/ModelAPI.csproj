@@ -4,8 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>Model</AssemblyName>
-        <RootNamespace>Model</RootNamespace>
+        <PackageId>ModelAPI</PackageId>
     </PropertyGroup>
 
 </Project>
