@@ -17,7 +17,7 @@ namespace WebshopAPI.Database
     {
         List<Product> products = new List<Product>();
 
-        using (SqlConnection connection = _dbConnection.OpenConnection())
+        using (SqlConnection connection =  _dbConnection.OpenConnection())
         {
             string query = "SELECT  * FROM Product";
 
