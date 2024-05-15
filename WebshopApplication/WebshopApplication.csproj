@@ -21,4 +21,9 @@
       <ProjectReference Include="..\WebshopAPI\WebshopAPI.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="BusinessLogicLayer\" />
+      <Folder Include="ServiceLayer\" />
+    </ItemGroup>
+
 </Project>
