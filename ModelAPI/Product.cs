@@ -7,6 +7,11 @@
         public decimal ProductPrice { get; set; }
         public string ProductDescription { get; set; }
 
+        
+        public Product()
+        {
+        }
+
         public Product(int productId, string name, decimal price, string description)
         {
             ProductId = productId;

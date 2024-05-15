@@ -1,5 +1,4 @@
-@page
-@model WebshopApplication.Pages.Product.Create
+@model ModelAPI.Product
 
 @{
     Layout = null;
@@ -9,11 +8,28 @@
 
 <html>
 <head>
-    <title></title>
+    <title>Create Product</title>
 </head>
 <body>
 <div>
-    
+    <form method="post">
+        <div>
+            <label asp-for="ProductName">Product Name:</label>
+            <input asp-for="ProductName" />
+            <span asp-validation-for="ProductName"></span>
+        </div>
+        <div>
+            <label asp-for="ProductPrice">Product Price:</label>
+            <input asp-for="ProductPrice" />
+            <span asp-validation-for="ProductPrice"></span>
+        </div>
+        <div>
+            <label asp-for="ProductDescription">Product Description:</label>
+            <input asp-for="ProductDescription" />
+            <span asp-validation-for="ProductDescription"></span>
+        </div>
+        <button type="submit">Create</button>
+    </form>
 </div>
 </body>
 </html>

@@ -1,11 +1,44 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ModelAPI;
+using System;
+using WebshopApplication.BusinessLogicLayerWeb;
 
-namespace WebshopApplication.Pages.Product;
-
-public class Create : PageModel
+namespace WebshopApplication.Views.Product
 {
-    public void OnGet()
+    public class Create : PageModel
     {
-        
+        private readonly ProductLogic _productLogic;
+
+        public Create(ProductLogic productLogic)
+        {
+            _productLogic = productLogic;
+        }
+
+        [BindProperty]
+        public ModelAPI.Product Product { get; set; }
+
+        public IActionResult OnGet()
+        {
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            try
+            {
+                await _productLogic.InsertProduct(Product);
+                return RedirectToPage("/Product/Index");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
     }
 }
