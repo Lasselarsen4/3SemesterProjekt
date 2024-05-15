@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
+using WebshopAPI.BusinessLogicLayer;
+using System;
 
 namespace WebshopAPI.Controllers
 {
@@ -7,23 +9,24 @@ namespace WebshopAPI.Controllers
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly List<Order> _orders = new List<Order>
+        private readonly IOrderLogic _orderLogic;
+
+        public OrderController(IOrderLogic orderLogic)
         {
-            new Order(1, DateTime.Now.AddDays(-2), DateTime.Now.AddDays(2), 50.99m),
-            new Order(2, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(3), 75.49m),
-            new Order(3, DateTime.Now, DateTime.Now.AddDays(1), 30.99m)
-        };
+            _orderLogic = orderLogic;
+        }
 
         [HttpGet]
         public ActionResult<IEnumerable<Order>> Get()
         {
-            return Ok(_orders);
+            var orders = _orderLogic.GetAllOrders();
+            return Ok(orders);
         }
 
         [HttpGet("{id}")]
         public ActionResult<Order> Get(int id)
         {
-            var order = _orders.FirstOrDefault(o => o.OrderId == id);
+            var order = _orderLogic.GetOrderById(id);
             if (order == null)
             {
                 return NotFound();
@@ -39,42 +42,43 @@ namespace WebshopAPI.Controllers
                 return BadRequest("Order object is null");
             }
 
-            // Generate a unique ID for the new order
-            order.OrderId = _orders.Count + 1;
-            
-            _orders.Add(order);
-            
-            return CreatedAtAction(nameof(Get), new { id = order.OrderId }, order);
+            try
+            {
+                _orderLogic.PlaceOrder(order);
+                return CreatedAtAction(nameof(Get), new { id = order.OrderId }, order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to place order: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Order updatedOrder)
         {
-            var orderToUpdate = _orders.FirstOrDefault(o => o.OrderId == id);
-            if (orderToUpdate == null)
+            try
             {
-                return NotFound($"Order with ID {id} not found");
+                _orderLogic.UpdateOrder(updatedOrder);
+                return NoContent();
             }
-
-            orderToUpdate.OrderDate = updatedOrder.OrderDate;
-            orderToUpdate.DeliveryDate = updatedOrder.DeliveryDate;
-            orderToUpdate.TotalPrice = updatedOrder.TotalPrice;
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to update order with ID {id}: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var orderToRemove = _orders.FirstOrDefault(o => o.OrderId == id);
-            if (orderToRemove == null)
+            try
             {
-                return NotFound($"Order with ID {id} not found");
+                _orderLogic.DeleteOrder(id);
+                return NoContent();
             }
-
-            _orders.Remove(orderToRemove);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to delete order with ID {id}: {ex.Message}");
+            }
         }
     }
 }

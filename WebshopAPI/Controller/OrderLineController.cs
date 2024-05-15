@@ -1,29 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
+using WebshopAPI.BusinessLogicLayer;
+using System;
 
-namespace WebshopAPI.Controller
+namespace WebshopAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class OrderLineController : ControllerBase
     {
-        private readonly List<OrderLine> _orderLines = new List<OrderLine>
+        private readonly IOrderLineLogic _orderLineLogic;
+
+        public OrderLineController(IOrderLineLogic orderLineLogic)
         {
-            new OrderLine { Quantity = 2 },
-            new OrderLine { Quantity = 1 },
-            new OrderLine { Quantity = 3 }
-        };
+            _orderLineLogic = orderLineLogic;
+        }
 
         [HttpGet]
         public ActionResult<IEnumerable<OrderLine>> Get()
         {
-            return Ok(_orderLines);
+            var orderLines = _orderLineLogic.GetAllOrderLines();
+            return Ok(orderLines);
         }
 
         [HttpGet("{id}")]
         public ActionResult<OrderLine> Get(int id)
         {
-            var orderLine = _orderLines.FirstOrDefault(o => o.Quantity == id);
+            var orderLine = _orderLineLogic.GetOrderLineById(id);
             if (orderLine == null)
             {
                 return NotFound();
@@ -39,39 +42,43 @@ namespace WebshopAPI.Controller
                 return BadRequest("Order line object is null");
             }
 
-            // Generate a unique ID for the new order line
-
-            _orderLines.Add(orderLine);
-
-            return CreatedAtAction(nameof(Get), new { id = orderLine.Quantity }, orderLine);
+            try
+            {
+                _orderLineLogic.AddOrderLine(orderLine);
+                return CreatedAtAction(nameof(Get), new { id = orderLine.Quantity }, orderLine);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to add order line: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] OrderLine updatedOrderLine)
         {
-            var orderLineToUpdate = _orderLines.FirstOrDefault(o => o.Quantity == id);
-            if (orderLineToUpdate == null)
+            try
             {
-                return NotFound($"Order line with quantity {id} not found");
+                _orderLineLogic.UpdateOrderLine(id, updatedOrderLine);
+                return NoContent();
             }
-
-            orderLineToUpdate.Quantity = updatedOrderLine.Quantity;
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to update order line with quantity {id}: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var orderLineToRemove = _orderLines.FirstOrDefault(o => o.Quantity == id);
-            if (orderLineToRemove == null)
+            try
             {
-                return NotFound($"Order line with quantity {id} not found");
+                _orderLineLogic.DeleteOrderLine(id);
+                return NoContent();
             }
-
-            _orderLines.Remove(orderLineToRemove);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to delete order line with quantity {id}: {ex.Message}");
+            }
         }
     }
 }

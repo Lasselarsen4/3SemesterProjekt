@@ -6,8 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<ILogicControl, LogicControl>();
-builder.Services.AddSingleton<IShapeAccess, DbShapeAccess>();
+builder.Services.AddSingleton<IProductLogic, ProductLogic>();
+builder.Services.AddSingleton<IOrderLogic, OrderLogic>();
+builder.Services.AddSingleton<ICustomerLogic, CustomerLogic>();
+builder.Services.AddSingleton<ICartLogic, CartLogic>();
 
 var app = builder.Build();
 

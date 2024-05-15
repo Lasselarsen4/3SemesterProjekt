@@ -23,8 +23,4 @@
       <_ContentIncludedByDefault Remove="Controller\Properties\launchSettings.json" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="BusinessLogicLayer\" />
-    </ItemGroup>
-
 </Project>

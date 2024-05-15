@@ -1,30 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
-using System;
-using System.Collections.Generic;
+using WebshopAPI.BusinessLogicLayer;
 
-namespace WebshopAPI.Controller
+namespace WebshopAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-        private readonly List<Customer> _customers;
-        public CustomerController()
+        private readonly ICustomerLogic _customerLogic;
+
+        public CustomerController(ICustomerLogic customerLogic)
         {
-            _customers = new List<Customer>();
+            _customerLogic = customerLogic;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Customer>> Get()
         {
-            return Ok(_customers);
+            var customers = _customerLogic.GetAllCustomers();
+            return Ok(customers);
         }
 
         [HttpGet("{id}")]
         public ActionResult<Customer> Get(int id)
         {
-            var customer = _customers.Find(c => c.CustomerId == id);
+            var customer = _customerLogic.GetCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -39,10 +40,8 @@ namespace WebshopAPI.Controller
             {
                 return BadRequest("Customer object is null");
             }
-            
-            customer.CustomerId = _customers.Count + 1;
 
-            _customers.Add(customer);
+            _customerLogic.AddCustomer(customer);
 
             return CreatedAtAction(nameof(Get), new { id = customer.CustomerId }, customer);
         }
@@ -50,7 +49,7 @@ namespace WebshopAPI.Controller
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Customer updatedCustomer)
         {
-            var existingCustomer = _customers.Find(c => c.CustomerId == id);
+            var existingCustomer = _customerLogic.GetCustomerById(id);
             if (existingCustomer == null)
             {
                 return NotFound();
@@ -60,18 +59,23 @@ namespace WebshopAPI.Controller
             existingCustomer.Email = updatedCustomer.Email;
             existingCustomer.Address = updatedCustomer.Address;
             existingCustomer.Phone = updatedCustomer.Phone;
+
+            _customerLogic.UpdateCustomer(existingCustomer);
+
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var customerToRemove = _customers.Find(c => c.CustomerId == id);
+            var customerToRemove = _customerLogic.GetCustomerById(id);
             if (customerToRemove == null)
             {
                 return NotFound();
             }
-            _customers.Remove(customerToRemove);
+
+            _customerLogic.DeleteCustomer(id);
+
             return NoContent();
         }
     }

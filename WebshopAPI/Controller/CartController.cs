@@ -1,18 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
+using WebshopAPI.BusinessLogicLayer;
 
-namespace WebshopAPI.Controller
+namespace WebshopAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
-        private static readonly Dictionary<int, Cart> Carts = new Dictionary<int, Cart>();
-        
+        private readonly ICartLogic _cartLogic;
+
+        public CartController(ICartLogic cartLogic)
+        {
+            _cartLogic = cartLogic;
+        }
+
         [HttpGet("{cartId}")]
         public ActionResult<Cart> Get(int cartId)
         {
-            if (Carts.TryGetValue(cartId, out var cart))
+            var cart = _cartLogic.GetCartById(cartId);
+            if (cart != null)
             {
                 return Ok(cart);
             }
@@ -25,17 +32,16 @@ namespace WebshopAPI.Controller
         [HttpPost]
         public ActionResult<Cart> Post()
         {
-            var newCart = new Cart();
-            Carts[newCart.CartId] = newCart;
+            var newCart = new Cart(); 
             return CreatedAtAction(nameof(Get), new { cartId = newCart.CartId }, newCart);
         }
 
         [HttpPost("{cartId}/items")]
         public ActionResult<Cart> AddItem(int cartId, [FromBody] Product product, [FromQuery] int quantity = 1)
         {
-            if (Carts.TryGetValue(cartId, out var cart))
+            var cart = _cartLogic.AddItemToCart(cartId, product, quantity);
+            if (cart != null)
             {
-                cart.AddItem(product, quantity);
                 return Ok(cart);
             }
             else
@@ -47,9 +53,9 @@ namespace WebshopAPI.Controller
         [HttpDelete("{cartId}/items/{productId}")]
         public ActionResult<Cart> RemoveItem(int cartId, int productId)
         {
-            if (Carts.TryGetValue(cartId, out var cart))
+            var cart = _cartLogic.RemoveItemFromCart(cartId, productId);
+            if (cart != null)
             {
-                cart.RemoveItem(productId);
                 return Ok(cart);
             }
             else
