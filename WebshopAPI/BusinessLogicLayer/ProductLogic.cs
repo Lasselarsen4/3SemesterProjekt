@@ -1,47 +1,42 @@
 ﻿using ModelAPI;
 using System.Collections.Generic;
 using System.Linq;
+using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer
 {
     public class ProductLogic : IProductLogic
     {
-        private readonly List<Product> _products = new List<Product>();
+        private readonly IProductDB _productDB;
+
+        public ProductLogic(IProductDB productDB)
+        {
+            _productDB = productDB;
+        }
 
         public IEnumerable<Product> GetAllProducts()
         {
-            return _products;
+            return _productDB.GetAll();
         }
 
         public Product GetProductById(int productId)
         {
-            return _products.FirstOrDefault(p => p.ProductId == productId);
+            return _productDB.GetById(productId);
         }
 
         public void AddProduct(Product product)
         {
-            product.ProductId = _products.Count + 1;
-            _products.Add(product);
+            _productDB.Add(product);
         }
 
         public void UpdateProduct(Product updatedProduct)
         {
-            var productToUpdate = _products.FirstOrDefault(p => p.ProductId == updatedProduct.ProductId);
-            if (productToUpdate != null)
-            {
-                productToUpdate.ProductName = updatedProduct.ProductName;
-                productToUpdate.ProductPrice = updatedProduct.ProductPrice;
-                productToUpdate.ProductDescription = updatedProduct.ProductDescription;
-            }
+            _productDB.Update(updatedProduct);
         }
 
         public void DeleteProduct(int productId)
         {
-            var productToRemove = _products.FirstOrDefault(p => p.ProductId == productId);
-            if (productToRemove != null)
-            {
-                _products.Remove(productToRemove);
-            }
+            _productDB.Delete(productId);
         }
     }
 }

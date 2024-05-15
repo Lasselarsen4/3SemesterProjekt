@@ -1,4 +1,5 @@
 ﻿using ModelAPI;
+using WebshopAPI.Database;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,44 +7,36 @@ namespace WebshopAPI.BusinessLogicLayer
 {
     public class CustomerLogic : ICustomerLogic
     {
-        private readonly List<Customer> _customers = new List<Customer>();
+        private readonly ICustomerDB _customerDB;
+
+        public CustomerLogic(ICustomerDB customerDB)
+        {
+            _customerDB = customerDB;
+        }
 
         public IEnumerable<Customer> GetAllCustomers()
         {
-            return _customers;
+            return _customerDB.GetAll();
         }
 
         public Customer GetCustomerById(int customerId)
         {
-            return _customers.FirstOrDefault(c => c.CustomerId == customerId);
+            return _customerDB.GetById(customerId);
         }
 
         public void AddCustomer(Customer customer)
         {
-            customer.CustomerId = _customers.Count + 1;
-            _customers.Add(customer);
+            _customerDB.Add(customer);
         }
 
         public void UpdateCustomer(Customer updatedCustomer)
         {
-            var customerToUpdate = _customers.FirstOrDefault(c => c.CustomerId == updatedCustomer.CustomerId);
-            if (customerToUpdate != null)
-            {
-                customerToUpdate.FirstName = updatedCustomer.FirstName;
-                customerToUpdate.LastName = updatedCustomer.LastName;
-                customerToUpdate.Email = updatedCustomer.Email;
-                customerToUpdate.Address = updatedCustomer.Address;
-                customerToUpdate.Phone = updatedCustomer.Phone;
-            }
+            _customerDB.Update(updatedCustomer);
         }
 
         public void DeleteCustomer(int customerId)
         {
-            var customerToRemove = _customers.FirstOrDefault(c => c.CustomerId == customerId);
-            if (customerToRemove != null)
-            {
-                _customers.Remove(customerToRemove);
-            }
+            _customerDB.Delete(customerId);
         }
     }
 }

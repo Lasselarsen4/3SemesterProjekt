@@ -10,6 +10,7 @@ builder.Services.AddSingleton<IProductLogic, ProductLogic>();
 builder.Services.AddSingleton<IOrderLogic, OrderLogic>();
 builder.Services.AddSingleton<ICustomerLogic, CustomerLogic>();
 builder.Services.AddSingleton<ICartLogic, CartLogic>();
+builder.Services.AddSingleton<IOrderLineLogic, OrderLineLogic>();
 
 var app = builder.Build();
 

@@ -2,7 +2,7 @@
 using ModelAPI;
 using WebshopAPI.BusinessLogicLayer;
 
-namespace WebshopAPI.Controllers
+namespace WebshopAPI.Controller
 {
     [ApiController]
     [Route("api/[controller]")]

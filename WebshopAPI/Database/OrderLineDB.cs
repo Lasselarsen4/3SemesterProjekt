@@ -37,26 +37,75 @@ namespace WebshopAPI.Database
 
         public OrderLine GetById(int id)
         {
-            // Implement GetById method logic here
-            throw new NotImplementedException();
+            using (SqlConnection connection = _dbConnection.OpenConnection())
+            {
+                string query = "SELECT quantity, orderId_FK, productId_FK FROM OrderLine WHERE orderLineId = @Id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return MapToOrderLine(reader);
+                        }
+                    }
+                }
+            }
+
+            return null; // Return null if order line with specified ID is not found
         }
 
         public void Add(OrderLine orderLine)
         {
-            // Implement Add method logic here
-            throw new NotImplementedException();
+            using (SqlConnection connection = _dbConnection.OpenConnection())
+            {
+                string query = "INSERT INTO OrderLine (quantity, orderId_FK, productId_FK) VALUES (@Quantity, @OrderId, @ProductId)";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Quantity", orderLine.Quantity);
+                    command.Parameters.AddWithValue("@OrderId", orderLine.OrderId);
+                    command.Parameters.AddWithValue("@ProductId", orderLine.ProductId);
+
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
-        public void Update(OrderLine orderLine)
+        public void Update(int id, OrderLine orderLine)
         {
-            // Implement Update method logic here
-            throw new NotImplementedException();
+            using (SqlConnection connection = _dbConnection.OpenConnection())
+            {
+                string query = "UPDATE OrderLine SET quantity = @Quantity, orderId_FK = @OrderId, productId_FK = @ProductId WHERE orderLineId = @Id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@Quantity", orderLine.Quantity);
+                    command.Parameters.AddWithValue("@OrderId", orderLine.OrderId);
+                    command.Parameters.AddWithValue("@ProductId", orderLine.ProductId);
+
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         public void Delete(int id)
         {
-            // Implement Delete method logic here
-            throw new NotImplementedException();
+            using (SqlConnection connection = _dbConnection.OpenConnection())
+            {
+                string query = "DELETE FROM OrderLine WHERE orderLineId = @Id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         private OrderLine MapToOrderLine(SqlDataReader reader)

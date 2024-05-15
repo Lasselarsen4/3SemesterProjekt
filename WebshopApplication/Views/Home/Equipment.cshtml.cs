@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using WebshopAPI.Controller;
 
 namespace WebshopApplication.Pages;
 

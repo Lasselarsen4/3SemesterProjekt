@@ -1,47 +1,42 @@
 ﻿using ModelAPI;
 using System.Collections.Generic;
 using System.Linq;
+using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer
 {
     public class OrderLogic : IOrderLogic
     {
-        private readonly List<Order> _orders = new List<Order>();
+        private readonly IOrderDB _orderDB;
+
+        public OrderLogic(IOrderDB orderDB)
+        {
+            _orderDB = orderDB;
+        }
 
         public IEnumerable<Order> GetAllOrders()
         {
-            return _orders;
+            return _orderDB.GetAll();
         }
 
         public Order GetOrderById(int orderId)
         {
-            return _orders.FirstOrDefault(o => o.OrderId == orderId);
+            return _orderDB.GetById(orderId);
         }
 
         public void PlaceOrder(Order order)
         {
-            order.OrderId = _orders.Count + 1;
-            _orders.Add(order);
+            _orderDB.Add(order);
         }
 
         public void UpdateOrder(Order updatedOrder)
         {
-            var orderToUpdate = _orders.FirstOrDefault(o => o.OrderId == updatedOrder.OrderId);
-            if (orderToUpdate != null)
-            {
-                orderToUpdate.OrderDate = updatedOrder.OrderDate;
-                orderToUpdate.DeliveryDate = updatedOrder.DeliveryDate;
-                orderToUpdate.TotalPrice = updatedOrder.TotalPrice;
-            }
+            _orderDB.Update(updatedOrder);
         }
 
         public void DeleteOrder(int orderId)
         {
-            var orderToRemove = _orders.FirstOrDefault(o => o.OrderId == orderId);
-            if (orderToRemove != null)
-            {
-                _orders.Remove(orderToRemove);
-            }
+            _orderDB.Delete(orderId);
         }
     }
 }

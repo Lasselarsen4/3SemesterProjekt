@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebshopAPI.BusinessLogicLayer;
 
-namespace WebshopAPI.Controllers
+namespace WebshopAPI.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
