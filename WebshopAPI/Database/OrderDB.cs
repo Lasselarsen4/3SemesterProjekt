@@ -31,7 +31,8 @@ namespace WebshopAPI.Database
                             (int)reader["orderId"],
                             (DateTime)reader["orderDate"],
                             (DateTime)reader["deliveryDate"],
-                            (decimal)reader["totalPrice"]
+                            (decimal)reader["totalPrice"],
+                            (int)reader["customerId_FK"]
                         ));
                     }
                 }
@@ -58,7 +59,8 @@ namespace WebshopAPI.Database
                                 (int)reader["orderId"],
                                 (DateTime)reader["orderDate"],
                                 (DateTime)reader["deliveryDate"],
-                                (decimal)reader["totalPrice"]
+                                (decimal)reader["totalPrice"],
+                                (int)reader["customerId_FK"]
                             );
                         }
                     }
@@ -72,13 +74,14 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "INSERT INTO [Order] (orderDate, deliveryDate, totalPrice) VALUES (@OrderDate, @DeliveryDate, @TotalPrice)";
+                string query = "INSERT INTO [Order] (orderDate, deliveryDate, totalPrice, customerId_FK) VALUES (@OrderDate, @DeliveryDate, @TotalPrice, @CustomerId)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
                     command.Parameters.AddWithValue("@DeliveryDate", order.DeliveryDate);
                     command.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
+                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId);
 
                     command.ExecuteNonQuery();
                 }

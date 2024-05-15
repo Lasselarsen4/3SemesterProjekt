@@ -20,7 +20,7 @@ namespace WebshopAPI.Database
 
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "SELECT quantity, orderId_FK, productId_FK FROM OrderLine";
+                string query = "SELECT * FROM OrderLine";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 using (SqlDataReader reader = command.ExecuteReader())

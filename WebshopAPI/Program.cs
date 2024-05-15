@@ -11,6 +11,12 @@ builder.Services.AddSingleton<IOrderLogic, OrderLogic>();
 builder.Services.AddSingleton<ICustomerLogic, CustomerLogic>();
 builder.Services.AddSingleton<ICartLogic, CartLogic>();
 builder.Services.AddSingleton<IOrderLineLogic, OrderLineLogic>();
+builder.Services.AddSingleton<IProductDB, ProductDB>();
+builder.Services.AddSingleton<IOrderDB, OrderDB>();
+builder.Services.AddSingleton<ICustomerDB, CustomerDB>();
+builder.Services.AddSingleton<IOrderLineDB, OrderLineDB>();
+builder.Services.AddSingleton<DatabaseConnection>();
+
 
 var app = builder.Build();
 
