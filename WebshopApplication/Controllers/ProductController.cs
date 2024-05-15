@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ModelAPI;
 using WebshopApplication.BusinessLogicLayerWeb;
@@ -19,6 +18,7 @@ namespace WebshopApplication.Controllers
         }
 
         // GET: /Product
+        [HttpGet]
         public async Task<IActionResult> Index(string sortParam)
         {
             var products = await _productLogic.GetProducts(sortParam);
@@ -30,6 +30,7 @@ namespace WebshopApplication.Controllers
         }
 
         // GET: /Product/Details/5
+        [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
             var product = await _productLogic.GetProductById(id);
@@ -41,13 +42,14 @@ namespace WebshopApplication.Controllers
         }
 
         // GET: /Product/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: /Product/Create
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
@@ -66,6 +68,7 @@ namespace WebshopApplication.Controllers
         }
 
         // GET: /Product/Edit/5
+        [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _productLogic.GetProductById(id);
@@ -77,7 +80,7 @@ namespace WebshopApplication.Controllers
         }
 
         // POST: /Product/Edit/5
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Product product)
         {
@@ -101,6 +104,7 @@ namespace WebshopApplication.Controllers
         }
 
         // GET: /Product/Delete/5
+        [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productLogic.GetProductById(id);
@@ -112,7 +116,7 @@ namespace WebshopApplication.Controllers
         }
 
         // POST: /Product/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
