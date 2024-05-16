@@ -1,35 +1,32 @@
 @model ModelAPI.Product
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Product</title>
+    <link rel="stylesheet" href="~/css/styles.css">
 </head>
 <body>
-<div>
-    <form method="post" asp-action="Create" asp-controller="Product">
-        <div>
-            <label asp-for="ProductName">Product Name:</label>
-            <input asp-for="ProductName" />
-            <span asp-validation-for="ProductName"></span>
-        </div>
-        <div>
-            <label asp-for="ProductPrice">Product Price:</label>
-            <input asp-for="ProductPrice" />
-            <span asp-validation-for="ProductPrice"></span>
-        </div>
-        <div>
-            <label asp-for="ProductDescription">Product Description:</label>
-            <input asp-for="ProductDescription" />
-            <span asp-validation-for="ProductDescription"></span>
-        </div>
-        <button type="submit">Create</button>
-    </form>
-</div>
+    <div class="container">
+        <h1>Create Product</h1>
+        <form method="post" asp-action="Create">
+            <div>
+                <label for="ProductName">Name:</label>
+                <input type="text" id="ProductName" name="ProductName" required>
+            </div>
+            <div>
+                <label for="ProductPrice">Price:</label>
+                <input type="text" id="ProductPrice" name="ProductPrice" required>
+            </div>
+            <div>
+                <label for="ProductDescription">Description:</label>
+                <input type="text" id="ProductDescription" name="ProductDescription" required>
+            </div>
+            <button type="submit">Create</button>
+        </form>
+        <a href="/Product">Back to List</a>
+    </div>
 </body>
 </html>

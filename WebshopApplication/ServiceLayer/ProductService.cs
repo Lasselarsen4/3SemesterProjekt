@@ -11,12 +11,14 @@ namespace WebshopApplication.ServiceLayer
     public class ProductService : IProductService
     {
         private readonly IServiceConnection _productServiceConnection;
-        public string BaseUrl { get; set; }
+        
+        
+        public string? UseServiceUrl { get; set; }
 
-        public ProductService(IConfiguration configuration)
+        public ProductService(IConfiguration inConfiguration)
         {
-            BaseUrl = configuration["BaseUrl"];
-            _productServiceConnection = new ServiceConnection(BaseUrl);
+            UseServiceUrl  = inConfiguration["ServiceUrlToUse"];
+            _productServiceConnection = new ServiceConnection(UseServiceUrl);
         }
 
         public async Task<List<Product>?> GetProducts(string? sortParam, int id = -1)
