@@ -22,7 +22,7 @@ namespace WebshopApplication.ServiceLayer
             List<Product>? listFromService = null;
 
             _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "products";
+            _productServiceConnection.UseUrl += "product";
             bool hasValidId = (id > 0);
             if (hasValidId)
             {
@@ -84,7 +84,7 @@ namespace WebshopApplication.ServiceLayer
             bool savedOk = false;
 
             _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "products";
+            _productServiceConnection.UseUrl += "product";
 
             if (_productServiceConnection != null)
             {
