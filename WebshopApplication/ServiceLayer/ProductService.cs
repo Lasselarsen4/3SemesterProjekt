@@ -1,6 +1,9 @@
-
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration; // Add this namespace for IConfiguration
 using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
@@ -8,14 +11,13 @@ namespace WebshopApplication.ServiceLayer
     public class ProductService : IProductService
     {
         private readonly IServiceConnection _productServiceConnection;
+        public string BaseUrl { get; set; }
 
-        public ProductService(IConfiguration inConfiguration)
+        public ProductService(IConfiguration configuration)
         {
-            UseServiceUrl = inConfiguration["ServiceUrlToUse"];
-            _productServiceConnection = new ServiceConnection(UseServiceUrl);
+            BaseUrl = configuration["BaseUrl"];
+            _productServiceConnection = new ServiceConnection(BaseUrl);
         }
-
-        public string? UseServiceUrl { get; set; }
 
         public async Task<List<Product>?> GetProducts(string? sortParam, int id = -1)
         {
@@ -114,7 +116,7 @@ namespace WebshopApplication.ServiceLayer
             bool updatedOk = false;
 
             _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "products";
+            _productServiceConnection.UseUrl += "product";
             _productServiceConnection.UseUrl += "/" + product.ProductId;
 
             if (_productServiceConnection != null)
@@ -145,7 +147,7 @@ namespace WebshopApplication.ServiceLayer
             bool deletedOk = false;
 
             _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "products/" + delId;
+            _productServiceConnection.UseUrl += "product/" + delId;
 
             if (_productServiceConnection != null)
             {
