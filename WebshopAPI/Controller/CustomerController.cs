@@ -2,6 +2,7 @@
 using ModelAPI;
 using WebshopAPI.BusinessLogicLayer;
 using System.Collections.Generic;
+using System;
 
 namespace WebshopAPI.Controller
 {
@@ -42,45 +43,43 @@ namespace WebshopAPI.Controller
                 return BadRequest("Customer object is null");
             }
 
-            _customerLogic.AddCustomer(customer);
-
-            return CreatedAtAction(nameof(Get), new { id = customer.CustomerId }, customer);
+            try
+            {
+                _customerLogic.AddCustomer(customer);
+                return CreatedAtAction(nameof(Get), new { id = customer.CustomerId }, customer);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to add customer: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Customer updatedCustomer)
         {
-            var existingCustomer = _customerLogic.GetCustomerById(id);
-            if (existingCustomer == null)
-            {
-                return NotFound();
-            }
-            
-            existingCustomer.FirstName = updatedCustomer.FirstName;
-            existingCustomer.LastName = updatedCustomer.LastName;
-            existingCustomer.Email = updatedCustomer.Email;
-            existingCustomer.Phone = updatedCustomer.Phone;
-            existingCustomer.StreetName = updatedCustomer.StreetName;
-            existingCustomer.HouseNumber = updatedCustomer.HouseNumber;
-            existingCustomer.ZipCode = updatedCustomer.ZipCode;
-
-            _customerLogic.UpdateCustomer(existingCustomer);
-
-            return NoContent();
+           try
+           {
+               _customerLogic.UpdateCustomer(updatedCustomer);
+               return NoContent();
+           }
+           catch(Exception ex)
+           {
+               return NotFound ($"Failed to update customer with ID {id}: {ex.Message}");
+           }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var customerToRemove = _customerLogic.GetCustomerById(id);
-            if (customerToRemove == null)
+            try
             {
-                return NotFound();
+                _customerLogic.DeleteCustomer(id);
+                return NoContent();
             }
-
-            _customerLogic.DeleteCustomer(id);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to delete product with ID {id}: {ex.Message}");
+            }
         }
     }
 }
