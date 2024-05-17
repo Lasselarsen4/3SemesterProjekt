@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// ProductController.cs
+using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,30 +52,29 @@ namespace WebshopAPI.Controller
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Product updatedProduct)
         {
-            var productToUpdate = _productLogic.GetProductById(id);
-            if (productToUpdate == null)
+            try
             {
-                return NotFound($"Product with ID {id} not found");
+                _productLogic.UpdateProduct(updatedProduct);
+                return NoContent();
             }
-
-            _productLogic.UpdateProduct(updatedProduct);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to update product with ID {id}: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var productToRemove = _productLogic.GetProductById(id);
-            if (productToRemove == null)
+            try
             {
-                return NotFound($"Product with ID {id} not found");
+                _productLogic.DeleteProduct(id);
+                return NoContent();
             }
-
-            _productLogic.DeleteProduct(id);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to delete product with ID {id}: {ex.Message}");
+            }      
         }
     }
 }
-

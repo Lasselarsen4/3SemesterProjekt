@@ -9,28 +9,28 @@
     <link rel="stylesheet" href="~/css/styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Delete Product</h1>
-        <div>
-            <strong>ID:</strong> @Model.ProductId
-        </div>
-        <div>
-            <strong>Name:</strong> @Model.ProductName
-        </div>
-        <div>
-            <strong>Price:</strong> @Model.ProductPrice
-        </div>
-        <div>
-            <strong>Description:</strong> @Model.ProductDescription
-        </div>
-        <div>
-            <strong>Stock:</strong> @Model.Stock
-        </div>
-        <form method="post" asp-action="Delete" asp-route-id="@Model.ProductId">
-            @Html.AntiForgeryToken()
-            <button type="submit">Delete</button>
-        </form>
-        <a href="/Product">Back to List</a>
+<div class="container">
+    <h1>Delete Product</h1>
+    <div>
+        <strong>ID:</strong> @Model.ProductId
     </div>
+    <div>
+        <strong>Name:</strong> @Model.ProductName
+    </div>
+    <div>
+        <strong>Price:</strong> @Model.ProductPrice
+    </div>
+    <div>
+        <strong>Description:</strong> @Model.ProductDescription
+    </div>
+    <div>
+        <strong>Stock:</strong> @Model.Stock
+    </div>
+    <form method="post" asp-action="Delete" asp-route-id="@Model.ProductId">
+        @Html.AntiForgeryToken()
+        <button type="submit">Delete</button>
+    </form>
+    <a href="/Product">Back to List</a>
+</div>
 </body>
 </html>

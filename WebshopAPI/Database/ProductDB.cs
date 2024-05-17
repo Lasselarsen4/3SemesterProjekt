@@ -1,3 +1,4 @@
+// ProductDB.cs
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -74,8 +75,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query =
-                    "INSERT INTO Product (ProductName, ProductPrice, ProductDescription, Stock) VALUES (@Name, @Price, @Description, @Stock)";
+                string query = "INSERT INTO Product (ProductName, ProductPrice, ProductDescription, Stock) VALUES (@Name, @Price, @Description, @Stock)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -93,8 +93,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query =
-                    "UPDATE Product SET ProductName = @Name, ProductPrice = @Price, ProductDescription = @Description, Stock = @Stock WHERE ProductId = @Id";
+                string query = "UPDATE Product SET ProductName = @Name, ProductPrice = @Price, ProductDescription = @Description, Stock = @Stock WHERE ProductId = @Id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
