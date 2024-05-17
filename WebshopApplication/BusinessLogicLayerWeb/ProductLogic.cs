@@ -20,10 +20,10 @@ namespace WebshopApplication.BusinessLogicLayerWeb
             return _productService.GetProducts(sortParam);
         }
 
-        public async Task<Product> GetProductById(int id)
+        public Task<Product> GetProductById(int id)
         {
-            var products = await _productService.GetProducts(null, id);
-            return products.FirstOrDefault();
+            return _productService.GetProducts(null, id)
+                .ContinueWith(task => task.Result != null && task.Result.Count > 0 ? task.Result[0] : null);
         }
 
         public Task<bool> InsertProduct(Product product)

@@ -1,0 +1,39 @@
+@model ModelAPI.Customer
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Customer</title>
+    <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Customer</h1>
+        <div>
+            <strong>ID:</strong> @Model.CustomerId
+        </div>
+        <div>
+            <strong>First Name:</strong> @Model.FirstName
+        </div>
+        <div>
+            <strong>Last Name:</strong> @Model.LastName
+        </div>
+        <div>
+            <strong>Email:</strong> @Model.Email
+        </div>
+        <div>
+            <strong>Address:</strong> @Model.Address
+        </div>
+        <div>
+            <strong>Phone:</strong> @Model.Phone
+        </div>
+        <form method="post" asp-action="Delete" asp-route-id="@Model.CustomerId">
+            @Html.AntiForgeryToken()
+            <button type="submit">Delete</button>
+        </form>
+        <a href="/Customer">Back to List</a>
+    </div>
+</body>
+</html>

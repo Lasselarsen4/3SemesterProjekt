@@ -1,47 +1,55 @@
-namespace WebshopApplication.ServiceLayer {
-    public class ServiceConnection : IServiceConnection {
+using System.Net.Http;
+using System.Threading.Tasks;
 
-        public ServiceConnection(string? inBaseUrl) {
+namespace WebshopApplication.ServiceLayer
+{
+    public class ServiceConnection : IServiceConnection
+    {
+        public ServiceConnection(string inBaseUrl)
+        {
             HttpEnabler = new HttpClient();
             BaseUrl = inBaseUrl;
             UseUrl = BaseUrl;
         }
 
         public HttpClient HttpEnabler { private get; init; }
-        public string? BaseUrl { get; init; }
-        public string? UseUrl { get; set; }
+        public string BaseUrl { get; init; }
+        public string UseUrl { get; set; }
 
-        public async Task<HttpResponseMessage?> CallServiceGet() {
-            HttpResponseMessage? hrm = null;
-            if (UseUrl != null) {
-                hrm = await HttpEnabler.GetAsync(UseUrl);
+        public async Task<HttpResponseMessage> CallServiceGet()
+        {
+            if (UseUrl != null)
+            {
+                return await HttpEnabler.GetAsync(UseUrl);
             }
-            return hrm;
+            return null;
         }
 
-        public async Task<HttpResponseMessage?> CallServicePost(StringContent postJson) {
-            HttpResponseMessage? hrm = null;
-            if (UseUrl != null) {
-                hrm = await HttpEnabler.PostAsync(UseUrl, postJson);
+        public async Task<HttpResponseMessage> CallServicePost(StringContent postJson)
+        {
+            if (UseUrl != null)
+            {
+                return await HttpEnabler.PostAsync(UseUrl, postJson);
             }
-            return hrm;
+            return null;
         }
 
-        public async Task<HttpResponseMessage?> CallServicePut(StringContent postJson) {
-            HttpResponseMessage? hrm = null;
-            if (UseUrl != null) {
-                hrm = await HttpEnabler.PutAsync(UseUrl, postJson);
+        public async Task<HttpResponseMessage> CallServicePut(StringContent postJson)
+        {
+            if (UseUrl != null)
+            {
+                return await HttpEnabler.PutAsync(UseUrl, postJson);
             }
-            return hrm;
+            return null;
         }
 
-        public async Task<HttpResponseMessage?> CallServiceDelete() {
-            HttpResponseMessage? hrm = null;
-            if (UseUrl != null) {
-                hrm = await HttpEnabler.DeleteAsync(UseUrl);
+        public async Task<HttpResponseMessage> CallServiceDelete()
+        {
+            if (UseUrl != null)
+            {
+                return await HttpEnabler.DeleteAsync(UseUrl);
             }
-            return hrm;
+            return null;
         }
-
     }
 }

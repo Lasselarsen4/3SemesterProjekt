@@ -8,19 +8,19 @@ using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
 {
-    public class ProductService : IProductService
+    public class CustomerService : ICustomerService
     {
         private readonly IServiceConnection _serviceConnection;
 
-        public ProductService(IConfiguration configuration)
+        public CustomerService(IConfiguration configuration)
         {
             var baseUrl = configuration["ServiceUrlToUse"];
             _serviceConnection = new ServiceConnection(baseUrl);
         }
 
-        public async Task<List<Product>> GetProducts(string sortParam, int id = -1)
+        public async Task<List<Customer>> GetCustomers(string sortParam, int id = -1)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/customer";
             if (id > 0)
             {
                 _serviceConnection.UseUrl += $"/{id}";
@@ -36,48 +36,50 @@ namespace WebshopApplication.ServiceLayer
                 var content = await response.Content.ReadAsStringAsync();
                 if (id > 0)
                 {
-                    var singleProduct = JsonConvert.DeserializeObject<Product>(content);
-                    return new List<Product> { singleProduct };
+                    var singleCustomer = JsonConvert.DeserializeObject<Customer>(content);
+                    return new List<Customer> { singleCustomer };
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<List<Product>>(content);
+                    return JsonConvert.DeserializeObject<List<Customer>>(content);
                 }
             }
 
-            return new List<Product>();
+            return new List<Customer>();
         }
 
-        public async Task<bool> SaveProduct(Product product)
+        public async Task<bool> SaveCustomer(Customer customer)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/customer";
             
-            var productForInsert = new
+            var customerForInsert = new
             {
-                product.ProductName,
-                product.ProductPrice,
-                product.ProductDescription
+                customer.FirstName,
+                customer.LastName,
+                customer.Email,
+                customer.Address,
+                customer.Phone
             };
 
-            var json = JsonConvert.SerializeObject(productForInsert);
+            var json = JsonConvert.SerializeObject(customerForInsert);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _serviceConnection.CallServicePost(content);
             return response != null && response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateProduct(Product product)
+        public async Task<bool> UpdateCustomer(Customer customer)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product/{product.ProductId}";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/customer/{customer.CustomerId}";
             
-            var json = JsonConvert.SerializeObject(product);
+            var json = JsonConvert.SerializeObject(customer);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _serviceConnection.CallServicePut(content);
             return response != null && response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteProduct(int id)
+        public async Task<bool> DeleteCustomer(int id)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product/{id}";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/customer/{id}";
             var response = await _serviceConnection.CallServiceDelete();
             return response != null && response.IsSuccessStatusCode;
         }

@@ -1,0 +1,27 @@
+@model ModelAPI.Customer
+
+@{
+    ViewData["Title"] = "Customer Details";
+}
+
+<h1>Customer Details</h1>
+
+<div>
+    <strong>ID:</strong> @Model.CustomerId
+</div>
+<div>
+    <strong>First Name:</strong> @Model.FirstName
+</div>
+<div>
+    <strong>Last Name:</strong> @Model.LastName
+</div>
+<div>
+    <strong>Email:</strong> @Model.Email
+</div>
+<div>
+    <strong>Address:</strong> @Model.Address
+</div>
+<div>
+    <strong>Phone:</strong> @Model.Phone
+</div>
+<a href="/Customer">Back to List</a>
