@@ -12,9 +12,9 @@ namespace WebshopApplication.Controllers
     {
         private readonly ProductLogic _productLogic;
 
-        public ProductController(IConfiguration configuration)
+        public ProductController(IConfiguration inConfiguration)
         {
-            _productLogic = new ProductLogic(configuration);
+            _productLogic = new ProductLogic(inConfiguration);
         }
 
         // GET: /Product

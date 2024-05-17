@@ -1,19 +1,21 @@
-@page
-@model WebshopApplication.Pages.Product.Details
+@model ModelAPI.Product
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Product Details";
 }
 
-<!DOCTYPE html>
+<h1>Product Details</h1>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
 <div>
-    
+    <strong>ID:</strong> @Model.ProductId
 </div>
-</body>
-</html>
+<div>
+    <strong>Name:</strong> @Model.ProductName
+</div>
+<div>
+    <strong>Price:</strong> @Model.ProductPrice
+</div>
+<div>
+    <strong>Description:</strong> @Model.ProductDescription
+</div>
+<a href="/Product">Back to List</a>

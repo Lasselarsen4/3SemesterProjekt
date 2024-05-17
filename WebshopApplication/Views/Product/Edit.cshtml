@@ -1,19 +1,27 @@
-@page
-@model WebshopApplication.Pages.Product.Edit
+@model ModelAPI.Product
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Edit Product";
 }
 
-<!DOCTYPE html>
+<h1>Edit Product</h1>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
-</div>
-</body>
-</html>
+<form asp-action="Edit" method="post">
+    <div>
+        <input type="hidden" id="ProductId" name="ProductId" value="@Model.ProductId">
+    </div>
+    <div>
+        <label for="ProductName">Name:</label>
+        <input type="text" id="ProductName" name="ProductName" value="@Model.ProductName" required>
+    </div>
+    <div>
+        <label for="ProductPrice">Price:</label>
+        <input type="text" id="ProductPrice" name="ProductPrice" value="@Model.ProductPrice" required>
+    </div>
+    <div>
+        <label for="ProductDescription">Description:</label>
+        <input type="text" id="ProductDescription" name="ProductDescription" value="@Model.ProductDescription" required>
+    </div>
+    <button type="submit">Save Changes</button>
+</form>
+<a href="/Product">Back to List</a>

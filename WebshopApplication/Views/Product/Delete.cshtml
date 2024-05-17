@@ -1,19 +1,25 @@
-@page
-@model WebshopApplication.Pages.Product.Delete
+@model ModelAPI.Product
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Delete Product";
 }
 
-<!DOCTYPE html>
+<h1>Delete Product</h1>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
 <div>
-    
+    <strong>ID:</strong> @Model.ProductId
 </div>
-</body>
-</html>
+<div>
+    <strong>Name:</strong> @Model.ProductName
+</div>
+<div>
+    <strong>Price:</strong> @Model.ProductPrice
+</div>
+<div>
+    <strong>Description:</strong> @Model.ProductDescription
+</div>
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.ProductId">
+    <button type="submit">Delete</button>
+</form>
+<a href="/Product">Back to List</a>
