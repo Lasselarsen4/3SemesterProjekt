@@ -51,14 +51,16 @@ namespace WebshopApplication.ServiceLayer
         public async Task<bool> SaveCustomer(Customer customer)
         {
             _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/customer";
-            
+
             var customerForInsert = new
             {
                 customer.FirstName,
                 customer.LastName,
                 customer.Email,
-                customer.Address,
-                customer.Phone
+                customer.Phone,
+                customer.StreetName,
+                customer.HouseNumber,
+                customer.ZipCode
             };
 
             var json = JsonConvert.SerializeObject(customerForInsert);
@@ -70,8 +72,20 @@ namespace WebshopApplication.ServiceLayer
         public async Task<bool> UpdateCustomer(Customer customer)
         {
             _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/customer/{customer.CustomerId}";
-            
-            var json = JsonConvert.SerializeObject(customer);
+
+            var customerForUpdate = new
+            {
+                customer.CustomerId,
+                customer.FirstName,
+                customer.LastName,
+                customer.Email,
+                customer.Phone,
+                customer.StreetName,
+                customer.HouseNumber,
+                customer.ZipCode
+            };
+
+            var json = JsonConvert.SerializeObject(customerForUpdate);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _serviceConnection.CallServicePut(content);
             return response != null && response.IsSuccessStatusCode;

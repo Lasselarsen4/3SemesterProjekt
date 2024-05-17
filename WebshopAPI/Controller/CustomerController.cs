@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
 using WebshopAPI.BusinessLogicLayer;
+using System.Collections.Generic;
 
 namespace WebshopAPI.Controller
 {
@@ -54,11 +55,14 @@ namespace WebshopAPI.Controller
             {
                 return NotFound();
             }
+            
             existingCustomer.FirstName = updatedCustomer.FirstName;
             existingCustomer.LastName = updatedCustomer.LastName;
             existingCustomer.Email = updatedCustomer.Email;
-            existingCustomer.Address = updatedCustomer.Address;
             existingCustomer.Phone = updatedCustomer.Phone;
+            existingCustomer.StreetName = updatedCustomer.StreetName;
+            existingCustomer.HouseNumber = updatedCustomer.HouseNumber;
+            existingCustomer.ZipCode = updatedCustomer.ZipCode;
 
             _customerLogic.UpdateCustomer(existingCustomer);
 

@@ -1,42 +1,41 @@
-﻿using ModelAPI;
+﻿using System.Collections.Generic;
+using ModelAPI;
 using WebshopAPI.Database;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace WebshopAPI.BusinessLogicLayer
 {
     public class CustomerLogic : ICustomerLogic
     {
-        private readonly ICustomerDB _customerDB;
+        private readonly ICustomerDB _customerDb;
 
-        public CustomerLogic(ICustomerDB customerDB)
+        public CustomerLogic(ICustomerDB customerDb)
         {
-            _customerDB = customerDB;
+            _customerDb = customerDb;
         }
 
         public IEnumerable<Customer> GetAllCustomers()
         {
-            return _customerDB.GetAll();
+            return _customerDb.GetAll();
         }
 
-        public Customer GetCustomerById(int customerId)
+        public Customer GetCustomerById(int id)
         {
-            return _customerDB.GetById(customerId);
+            return _customerDb.GetById(id);
         }
 
         public void AddCustomer(Customer customer)
         {
-            _customerDB.Add(customer);
+            _customerDb.Add(customer);
         }
 
-        public void UpdateCustomer(Customer updatedCustomer)
+        public void UpdateCustomer(Customer customer)
         {
-            _customerDB.Update(updatedCustomer);
+            _customerDb.Update(customer);
         }
 
-        public void DeleteCustomer(int customerId)
+        public void DeleteCustomer(int id)
         {
-            _customerDB.Delete(customerId);
+            _customerDb.Delete(id);
         }
     }
 }

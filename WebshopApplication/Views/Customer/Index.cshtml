@@ -22,10 +22,16 @@
             @Html.DisplayNameFor(model => model.First().Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Address)
+            @Html.DisplayNameFor(model => model.First().Phone)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Phone)
+            @Html.DisplayNameFor(model => model.First().StreetName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().HouseNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ZipCode)
         </th>
         <th></th>
     </tr>
@@ -46,10 +52,16 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address)
+                @Html.DisplayFor(modelItem => item.Phone)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Phone)
+                @Html.DisplayFor(modelItem => item.StreetName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HouseNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
             </td>
         </tr>
     }

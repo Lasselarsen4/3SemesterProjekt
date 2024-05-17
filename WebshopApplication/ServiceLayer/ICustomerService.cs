@@ -6,9 +6,9 @@ namespace WebshopApplication.ServiceLayer
 {
     public interface ICustomerService
     {
-        Task<List<Customer>?> GetCustomers(string? sortParam, int id = -1);
+        Task<List<Customer>> GetCustomers(string sortParam, int id = -1);
         Task<bool> SaveCustomer(Customer customer);
         Task<bool> UpdateCustomer(Customer customer);
-        Task<bool> DeleteCustomer(int delId);
+        Task<bool> DeleteCustomer(int id);
     }
 }

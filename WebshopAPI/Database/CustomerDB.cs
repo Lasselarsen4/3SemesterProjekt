@@ -29,11 +29,14 @@ namespace WebshopAPI.Database
                     {
                         customers.Add(new Customer
                         {
-                            CustomerId = (int)reader["CustomerId"],
-                            FirstName = reader["FirstName"].ToString(),
-                            LastName = reader["LastName"].ToString(),
-                            Email = reader["Email"].ToString(),
-                            Phone = Convert.ToInt32(reader["Phone"])
+                            CustomerId = (int)reader["customerId"],
+                            FirstName = reader["firstName"].ToString(),
+                            LastName = reader["lastName"].ToString(),
+                            Email = reader["email"].ToString(),
+                            Phone = Convert.ToInt32(reader["phone"]),
+                            StreetName = reader["streetName"].ToString(),
+                            HouseNumber = (int)reader["houseNumber"],
+                            ZipCode = (int)reader["zipCode"]
                         });
                     }
                 }
@@ -46,7 +49,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "SELECT CustomerId, FirstName, LastName, Email, Phone FROM Customer WHERE CustomerId = @Id";
+                string query = "SELECT * FROM Customer WHERE customerId = @Id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -58,11 +61,14 @@ namespace WebshopAPI.Database
                         {
                             return new Customer
                             {
-                                CustomerId = (int)reader["CustomerId"],
-                                FirstName = reader["FirstName"].ToString(),
-                                LastName = reader["LastName"].ToString(),
-                                Email = reader["Email"].ToString(),
-                                Phone = Convert.ToInt32(reader["Phone"])
+                                CustomerId = (int)reader["customerId"],
+                                FirstName = reader["firstName"].ToString(),
+                                LastName = reader["lastName"].ToString(),
+                                Email = reader["email"].ToString(),
+                                Phone = Convert.ToInt32(reader["phone"]),
+                                StreetName = reader["streetName"].ToString(),
+                                HouseNumber = (int)reader["houseNumber"],
+                                ZipCode = (int)reader["zipCode"]
                             };
                         }
                     }
@@ -76,7 +82,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "INSERT INTO Customer (FirstName, LastName, Email, Phone) VALUES (@FirstName, @LastName, @Email, @Phone)";
+                string query = "INSERT INTO Customer (firstName, lastName, email, phone, streetName, houseNumber, zipCode) VALUES (@FirstName, @LastName, @Email, @Phone, @StreetName, @HouseNumber, @ZipCode)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -84,6 +90,9 @@ namespace WebshopAPI.Database
                     command.Parameters.AddWithValue("@LastName", customer.LastName);
                     command.Parameters.AddWithValue("@Email", customer.Email);
                     command.Parameters.AddWithValue("@Phone", customer.Phone);
+                    command.Parameters.AddWithValue("@StreetName", customer.StreetName);
+                    command.Parameters.AddWithValue("@HouseNumber", customer.HouseNumber);
+                    command.Parameters.AddWithValue("@ZipCode", customer.ZipCode);
 
                     command.ExecuteNonQuery();
                 }
@@ -94,7 +103,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "UPDATE Customer SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Phone = @Phone WHERE CustomerId = @Id";
+                string query = "UPDATE Customer SET firstName = @FirstName, lastName = @LastName, email = @Email, phone = @Phone, streetName = @StreetName, houseNumber = @HouseNumber, zipCode = @ZipCode WHERE customerId = @Id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -103,6 +112,9 @@ namespace WebshopAPI.Database
                     command.Parameters.AddWithValue("@LastName", customer.LastName);
                     command.Parameters.AddWithValue("@Email", customer.Email);
                     command.Parameters.AddWithValue("@Phone", customer.Phone);
+                    command.Parameters.AddWithValue("@StreetName", customer.StreetName);
+                    command.Parameters.AddWithValue("@HouseNumber", customer.HouseNumber);
+                    command.Parameters.AddWithValue("@ZipCode", customer.ZipCode);
 
                     command.ExecuteNonQuery();
                 }
@@ -113,7 +125,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "DELETE FROM Customer WHERE CustomerId = @Id";
+                string query = "DELETE FROM Customer WHERE customerId = @Id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
