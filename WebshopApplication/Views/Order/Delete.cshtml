@@ -1,0 +1,36 @@
+@model ModelAPI.Order
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Order</title>
+    <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Order</h1>
+        <div>
+            <strong>ID:</strong> @Model.OrderId
+        </div>
+        <div>
+            <strong>Order Date:</strong> @Model.OrderDate.ToShortDateString()
+        </div>
+        <div>
+            <strong>Delivery Date:</strong> @Model.DeliveryDate.ToShortDateString()
+        </div>
+        <div>
+            <strong>Total Price:</strong> @Model.TotalPrice
+        </div>
+        <div>
+            <strong>Customer ID:</strong> @Model.CustomerId_FK
+        </div>
+        <form method="post" asp-action="Delete" asp-route-id="@Model.OrderId">
+            @Html.AntiForgeryToken()
+            <button type="submit">Delete</button>
+        </form>
+        <a href="/Order">Back to List</a>
+    </div>
+</body>
+</html>

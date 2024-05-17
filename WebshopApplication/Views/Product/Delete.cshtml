@@ -23,6 +23,9 @@
         <div>
             <strong>Description:</strong> @Model.ProductDescription
         </div>
+        <div>
+            <strong>Stock:</strong> @Model.Stock
+        </div>
         <form method="post" asp-action="Delete" asp-route-id="@Model.ProductId">
             @Html.AntiForgeryToken()
             <button type="submit">Delete</button>

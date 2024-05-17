@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ModelAPI;
 using WebshopApplication.BusinessLogicLayerWeb;
@@ -7,108 +7,108 @@ using Microsoft.Extensions.Configuration;
 namespace WebshopApplication.Controllers
 {
     [Route("[controller]")]
-    public class ProductController : Controller
+    public class OrderController : Controller
     {
-        private readonly IProductLogic _productLogic;
+        private readonly OrderLogic _orderLogic;
 
-        public ProductController(IConfiguration configuration)
+        public OrderController(IConfiguration configuration)
         {
-            _productLogic = new ProductLogic(configuration);
+            _orderLogic = new OrderLogic(configuration);
         }
 
-        // GET: /Product
+        // GET: /Order
         [HttpGet]
         public async Task<IActionResult> Index(string sortParam)
         {
-            var products = await _productLogic.GetProducts(sortParam);
-            return View(products);
+            var orders = await _orderLogic.GetOrders(sortParam);
+            return View(orders);
         }
 
-        // GET: /Product/Details/5
+        // GET: /Order/Details/5
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var product = await _productLogic.GetProductById(id);
-            if (product == null)
+            var order = await _orderLogic.GetOrderById(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(order);
         }
 
-        // GET: /Product/Create
+        // GET: /Order/Create
         [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Product/Create
+        // POST: /Order/Create
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(Order order)
         {
             if (ModelState.IsValid)
             {
-                if (await _productLogic.InsertProduct(product))
+                if (await _orderLogic.InsertOrder(order))
                 {
                     return RedirectToAction(nameof(Index));
                 }
             }
-            return View(product);
+            return View(order);
         }
 
-        // GET: /Product/Edit/5
+        // GET: /Order/Edit/5
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            var product = await _productLogic.GetProductById(id);
-            if (product == null)
+            var order = await _orderLogic.GetOrderById(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(order);
         }
 
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
+        public async Task<IActionResult> Edit(int id, Order order)
         {
-            if (id != product.ProductId)
+            if (id != order.OrderId)
             {
-                return BadRequest("Product ID mismatch.");
+                return BadRequest("Order ID mismatch.");
             }
 
             if (ModelState.IsValid)
             {
-                if (await _productLogic.UpdateProduct(product))
+                if (await _orderLogic.UpdateOrder(order))
                 {
                     return RedirectToAction(nameof(Index));
                 }
             }
-            return View(product);
+            return View(order);
         }
 
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _productLogic.GetProductById(id);
-            if (product == null)
+            var order = await _orderLogic.GetOrderById(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(order);
         }
 
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _productLogic.DeleteProduct(id))
+            if (await _orderLogic.DeleteOrder(id))
             {
                 return RedirectToAction(nameof(Index));
             }
-            return BadRequest($"Failed to delete product with ID {id}.");
+            return BadRequest($"Failed to delete order with ID {id}.");
         }
     }
 }

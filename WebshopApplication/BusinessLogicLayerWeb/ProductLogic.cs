@@ -6,7 +6,7 @@ using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.BusinessLogicLayerWeb
 {
-    public class ProductLogic
+    public class ProductLogic : IProductLogic
     {
         private readonly IProductService _productService;
 

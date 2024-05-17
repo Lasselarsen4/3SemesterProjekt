@@ -1,0 +1,31 @@
+@model ModelAPI.Order
+
+@{
+    ViewData["Title"] = "Edit Order";
+}
+
+<h1>Edit Order</h1>
+
+<form asp-action="Edit" method="post">
+    <div>
+        <input type="hidden" id="OrderId" name="OrderId" value="@Model.OrderId">
+    </div>
+    <div>
+        <label for="OrderDate">Order Date:</label>
+        <input type="date" id="OrderDate" name="OrderDate" value="@Model.OrderDate.ToString("yyyy-MM-dd")" required>
+    </div>
+    <div>
+        <label for="DeliveryDate">Delivery Date:</label>
+        <input type="date" id="DeliveryDate" name="DeliveryDate" value="@Model.DeliveryDate.ToString("yyyy-MM-dd")" required>
+    </div>
+    <div>
+        <label for="TotalPrice">Total Price:</label>
+        <input type="text" id="TotalPrice" name="TotalPrice" value="@Model.TotalPrice" required>
+    </div>
+    <div>
+        <label for="CustomerId_FK">Customer ID:</label>
+        <input type="text" id="CustomerId_FK" name="CustomerId_FK" value="@Model.CustomerId_FK" required>
+    </div>
+    <button type="submit">Save Changes</button>
+</form>
+<a href="/Order">Back to List</a>

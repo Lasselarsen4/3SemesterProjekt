@@ -1,0 +1,37 @@
+@model ModelAPI.Order
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order</title>
+    <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Create Order</h1>
+    <form method="post" asp-action="Create">
+        @Html.AntiForgeryToken()
+        <div>
+            <label for="OrderDate">Order Date:</label>
+            <input type="date" id="OrderDate" name="OrderDate" required>
+        </div>
+        <div>
+            <label for="DeliveryDate">Delivery Date:</label>
+            <input type="date" id="DeliveryDate" name="DeliveryDate" required>
+        </div>
+        <div>
+            <label for="TotalPrice">Total Price:</label>
+            <input type="text" id="TotalPrice" name="TotalPrice" required>
+        </div>
+        <div>
+            <label for="CustomerId_FK">Customer ID:</label>
+            <input type="text" id="CustomerId_FK" name="CustomerId_FK" required>
+        </div>
+        <button type="submit">Create</button>
+    </form>
+    <a href="/Order">Back to List</a>
+</div>
+</body>
+</html>

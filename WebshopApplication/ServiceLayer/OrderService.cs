@@ -8,19 +8,19 @@ using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
 {
-    public class ProductService : IProductService
+    public class OrderService : IOrderService
     {
         private readonly IServiceConnection _serviceConnection;
 
-        public ProductService(IConfiguration configuration)
+        public OrderService(IConfiguration configuration)
         {
             var baseUrl = configuration["ServiceUrlToUse"];
             _serviceConnection = new ServiceConnection(baseUrl);
         }
 
-        public async Task<List<Product>> GetProducts(string sortParam, int id = -1)
+        public async Task<List<Order>> GetOrders(string sortParam, int id = -1)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order";
             if (id > 0)
             {
                 _serviceConnection.UseUrl += $"/{id}";
@@ -36,58 +36,49 @@ namespace WebshopApplication.ServiceLayer
                 var content = await response.Content.ReadAsStringAsync();
                 if (id > 0)
                 {
-                    var singleProduct = JsonConvert.DeserializeObject<Product>(content);
-                    return new List<Product> { singleProduct };
+                    var singleOrder = JsonConvert.DeserializeObject<Order>(content);
+                    return new List<Order> { singleOrder };
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<List<Product>>(content);
+                    return JsonConvert.DeserializeObject<List<Order>>(content);
                 }
             }
 
-            return new List<Product>();
+            return new List<Order>();
         }
 
-        public async Task<bool> SaveProduct(Product product)
+        public async Task<bool> SaveOrder(Order order)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order";
 
-            var productForInsert = new
+            var orderForInsert = new
             {
-                product.ProductName,
-                product.ProductPrice,
-                product.ProductDescription,
-                product.Stock
+                order.OrderDate,
+                order.DeliveryDate,
+                order.TotalPrice,
+                order.CustomerId_FK
             };
 
-            var json = JsonConvert.SerializeObject(productForInsert);
+            var json = JsonConvert.SerializeObject(orderForInsert);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _serviceConnection.CallServicePost(content);
             return response != null && response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateProduct(Product product)
+        public async Task<bool> UpdateOrder(Order order)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product/{product.ProductId}";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order/{order.OrderId}";
 
-            var productForUpdate = new
-            {
-                product.ProductId,
-                product.ProductName,
-                product.ProductPrice,
-                product.ProductDescription,
-                product.Stock
-            };
-
-            var json = JsonConvert.SerializeObject(productForUpdate);
+            var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _serviceConnection.CallServicePut(content);
             return response != null && response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteProduct(int id)
+        public async Task<bool> DeleteOrder(int id)
         {
-            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product/{id}";
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order/{id}";
             var response = await _serviceConnection.CallServiceDelete();
             return response != null && response.IsSuccessStatusCode;
         }
