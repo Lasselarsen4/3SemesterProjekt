@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using ModelAPI;
 using WebshopApplication.BusinessLogicLayerWeb;
@@ -12,9 +11,9 @@ namespace WebshopApplication.Controllers
     {
         private readonly ProductLogic _productLogic;
 
-        public ProductController(IConfiguration inConfiguration)
+        public ProductController(IConfiguration configuration)
         {
-            _productLogic = new ProductLogic(inConfiguration);
+            _productLogic = new ProductLogic(configuration);
         }
 
         // GET: /Product
@@ -22,10 +21,6 @@ namespace WebshopApplication.Controllers
         public async Task<IActionResult> Index(string sortParam)
         {
             var products = await _productLogic.GetProducts(sortParam);
-            if (products == null)
-            {
-                return NotFound();
-            }
             return View(products);
         }
 
@@ -53,18 +48,14 @@ namespace WebshopApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            try
+            if (ModelState.IsValid)
             {
                 if (await _productLogic.InsertProduct(product))
                 {
                     return RedirectToAction(nameof(Index));
                 }
-                return View(product);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-            }
+            return View(product);
         }
 
         // GET: /Product/Edit/5
@@ -89,18 +80,11 @@ namespace WebshopApplication.Controllers
                 return BadRequest("Product ID mismatch.");
             }
 
-            try
+            if (await _productLogic.UpdateProduct(product))
             {
-                if (await _productLogic.UpdateProduct(product))
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(product);
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-            }
+            return View(product);
         }
 
         // GET: /Product/Delete/5
@@ -120,18 +104,11 @@ namespace WebshopApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+            if (await _productLogic.DeleteProduct(id))
             {
-                if (await _productLogic.DeleteProduct(id))
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                return BadRequest($"Failed to delete product with ID {id}.");
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-            }
+            return BadRequest($"Failed to delete product with ID {id}.");
         }
     }
 }

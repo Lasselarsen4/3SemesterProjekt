@@ -3,172 +3,76 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration; // Add this namespace for IConfiguration
+using Microsoft.Extensions.Configuration;
 using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
 {
     public class ProductService : IProductService
     {
-        private readonly IServiceConnection _productServiceConnection;
-        
-        
-        public string? UseServiceUrl { get; set; }
+        private readonly IServiceConnection _serviceConnection;
 
-        public ProductService(IConfiguration inConfiguration)
+        public ProductService(IConfiguration configuration)
         {
-            UseServiceUrl  = inConfiguration["ServiceUrlToUse"];
-            _productServiceConnection = new ServiceConnection(UseServiceUrl);
+            var baseUrl = configuration["ServiceUrlToUse"];
+            _serviceConnection = new ServiceConnection(baseUrl);
         }
 
-        public async Task<List<Product>?> GetProducts(string? sortParam, int id = -1)
+        public async Task<List<Product>> GetProducts(string sortParam, int id = -1)
         {
-            List<Product>? listFromService = null;
-
-            _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "product";
-            bool hasValidId = (id > 0);
-            if (hasValidId)
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product";
+            if (id > 0)
             {
-                _productServiceConnection.UseUrl += "/" + id.ToString();
+                _serviceConnection.UseUrl += $"/{id}";
             }
-            else
+            else if (!string.IsNullOrEmpty(sortParam) && sortParam.ToLower() != "none")
             {
-                bool hasSortParam = ((sortParam != null) && (!sortParam.ToLower().Equals("none")));
-                if (hasSortParam)
-                {
-                    _productServiceConnection.UseUrl += "?sortBy=" + sortParam;
-                }
+                _serviceConnection.UseUrl += $"?sortBy={sortParam}";
             }
 
-            if (_productServiceConnection != null)
+            var response = await _serviceConnection.CallServiceGet();
+            if (response != null && response.IsSuccessStatusCode)
             {
-                try
-                {
-                    var serviceResponse = await _productServiceConnection.CallServiceGet();
-                    if (serviceResponse != null && serviceResponse.IsSuccessStatusCode)
-                    {
-                        var content = await serviceResponse.Content.ReadAsStringAsync();
-                        if (hasValidId)
-                        {
-                            Product? foundProduct = JsonConvert.DeserializeObject<Product>(content);
-                            if (foundProduct != null)
-                            {
-                                listFromService = new List<Product>() { foundProduct };
-                            }
-                        }
-                        else
-                        {
-                            listFromService = JsonConvert.DeserializeObject<List<Product>>(content);
-                        }
-                    }
-                    else
-                    {
-                        if (serviceResponse != null && serviceResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        {
-                            listFromService = new List<Product>();
-                        }
-                        else
-                        {
-                            listFromService = null;
-                        }
-                    }
-                }
-                catch
-                {
-                    listFromService = null;
-                }
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Product>>(content);
             }
 
-            return listFromService;
+            return new List<Product>();
         }
 
         public async Task<bool> SaveProduct(Product product)
         {
-            bool savedOk = false;
-
-            _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "product";
-
-            if (_productServiceConnection != null)
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product";
+    
+            // Do not include productId in the JSON for insertion
+            var productForInsert = new
             {
-                try
-                {
-                    var json = JsonConvert.SerializeObject(product);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                product.ProductName,
+                product.ProductPrice,
+                product.ProductDescription
+            };
 
-                    var serviceResponse = await _productServiceConnection.CallServicePost(content);
-                    if (serviceResponse != null && serviceResponse.IsSuccessStatusCode)
-                    {
-                        savedOk = true;
-                    }
-                }
-                catch
-                {
-                    savedOk = false;
-                }
-            }
-
-            return savedOk;
+            var json = JsonConvert.SerializeObject(productForInsert);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _serviceConnection.CallServicePost(content);
+            return response != null && response.IsSuccessStatusCode;
         }
 
 
         public async Task<bool> UpdateProduct(Product product)
         {
-            bool updatedOk = false;
-
-            _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "product";
-            _productServiceConnection.UseUrl += "/" + product.ProductId;
-
-            if (_productServiceConnection != null)
-            {
-                try
-                {
-                    var json = JsonConvert.SerializeObject(product);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                    var serviceResponse = await _productServiceConnection.CallServicePut(content);
-                    bool wasResponse = (serviceResponse != null);
-                    if (serviceResponse != null && serviceResponse.IsSuccessStatusCode)
-                    {
-                        updatedOk = true;
-                    }
-                }
-                catch
-                {
-                    updatedOk = false;
-                }
-            }
-
-            return updatedOk;
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product/{product.ProductId}";
+            var json = JsonConvert.SerializeObject(product);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _serviceConnection.CallServicePut(content);
+            return response != null && response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteProduct(int delId)
+        public async Task<bool> DeleteProduct(int id)
         {
-            bool deletedOk = false;
-
-            _productServiceConnection.UseUrl = _productServiceConnection.BaseUrl;
-            _productServiceConnection.UseUrl += "product/" + delId;
-
-            if (_productServiceConnection != null)
-            {
-                try
-                {
-                    var serviceResponse = await _productServiceConnection.CallServiceDelete();
-                    bool wasResponse = (serviceResponse != null);
-                    if (serviceResponse != null && serviceResponse.IsSuccessStatusCode)
-                    {
-                        deletedOk = true;
-                    }
-                }
-                catch
-                {
-                    deletedOk = false;
-                }
-            }
-
-            return deletedOk;
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product/{id}";
+            var response = await _serviceConnection.CallServiceDelete();
+            return response != null && response.IsSuccessStatusCode;
         }
     }
 }

@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddControllers(); // This adds controller support
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Ensure IConfiguration is available for dependency injection
 
 var app = builder.Build();

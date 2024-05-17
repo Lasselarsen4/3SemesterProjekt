@@ -8,8 +8,8 @@ namespace WebshopAPI.Database
     {
         private readonly string _serverAddress = "hildur.ucn.dk";
         private readonly int _serverPort = 1433;
-        private readonly string _databaseName = "DMA-CSD-V23_10478742";
-        private readonly string _userName = "DMA-CSD-V23_10478742";
+        private readonly string _databaseName = "DMA-CSD-V23_10478730";
+        private readonly string _userName = "DMA-CSD-V23_10478730";
         private readonly string _password = "Password1!";
         private readonly string _connectionString;
 

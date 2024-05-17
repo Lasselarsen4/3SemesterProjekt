@@ -18,6 +18,9 @@
         <th>
             @Html.DisplayNameFor(model => model.First().ProductPrice)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ProductDescription)
+        </th>
         <th></th>
     </tr>
     </thead>
@@ -32,6 +35,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescription)
             </td>
         </tr>
     }

@@ -8,72 +8,37 @@ namespace WebshopApplication.BusinessLogicLayerWeb
 {
     public class ProductLogic
     {
-        private readonly ProductService _productService;
+        private readonly IProductService _productService;
 
-        public ProductLogic(IConfiguration inConfiguration)
+        public ProductLogic(IConfiguration configuration)
         {
-            _productService = new ProductService(inConfiguration);
+            _productService = new ProductService(configuration);
         }
 
-        public async Task<List<Product>?> GetProducts(string? sortParam, int id = -1)
+        public Task<List<Product>> GetProducts(string sortParam)
         {
-            try
-            {
-                return await _productService.GetProducts(sortParam, id);
-            }
-            catch
-            {
-                return null;
-            }
+            return _productService.GetProducts(sortParam);
         }
 
-        public async Task<Product?> GetProductById(int id)
+        public Task<Product> GetProductById(int id)
         {
-            try
-            {
-                var products = await _productService.GetProducts(null, id);
-                return products?.Count > 0 ? products[0] : null;
-            }
-            catch
-            {
-                return null;
-            }
+            return _productService.GetProducts(null, id)
+                .ContinueWith(task => task.Result != null && task.Result.Count > 0 ? task.Result[0] : null);
         }
 
-        public async Task<bool> InsertProduct(Product product)
+        public Task<bool> InsertProduct(Product product)
         {
-            try
-            {
-                return await _productService.SaveProduct(product);
-            }
-            catch
-            {
-                return false;
-            }
+            return _productService.SaveProduct(product);
         }
 
-        public async Task<bool> UpdateProduct(Product product)
+        public Task<bool> UpdateProduct(Product product)
         {
-            try
-            {
-                return await _productService.UpdateProduct(product);
-            }
-            catch
-            {
-                return false;
-            }
+            return _productService.UpdateProduct(product);
         }
 
-        public async Task<bool> DeleteProduct(int delId)
+        public Task<bool> DeleteProduct(int id)
         {
-            try
-            {
-                return await _productService.DeleteProduct(delId);
-            }
-            catch
-            {
-                return false;
-            }
+            return _productService.DeleteProduct(id);
         }
     }
 }
