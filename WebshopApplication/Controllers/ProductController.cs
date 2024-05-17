@@ -70,7 +70,6 @@ namespace WebshopApplication.Controllers
             return View(product);
         }
 
-        // POST: /Product/Edit/5
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Product product)
@@ -80,14 +79,16 @@ namespace WebshopApplication.Controllers
                 return BadRequest("Product ID mismatch.");
             }
 
-            if (await _productLogic.UpdateProduct(product))
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                if (await _productLogic.UpdateProduct(product))
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(product);
         }
 
-        // GET: /Product/Delete/5
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -99,7 +100,6 @@ namespace WebshopApplication.Controllers
             return View(product);
         }
 
-        // POST: /Product/Delete/5
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

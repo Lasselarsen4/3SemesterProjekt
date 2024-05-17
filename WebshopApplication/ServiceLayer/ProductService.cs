@@ -34,7 +34,17 @@ namespace WebshopApplication.ServiceLayer
             if (response != null && response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<Product>>(content);
+                if (id > 0)
+                {
+                    // Deserialize a single product
+                    var singleProduct = JsonConvert.DeserializeObject<Product>(content);
+                    return new List<Product> { singleProduct };
+                }
+                else
+                {
+                    // Deserialize a list of products
+                    return JsonConvert.DeserializeObject<List<Product>>(content);
+                }
             }
 
             return new List<Product>();

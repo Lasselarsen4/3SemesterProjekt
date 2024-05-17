@@ -1,25 +1,33 @@
 @model ModelAPI.Product
 
-@{
-    ViewData["Title"] = "Delete Product";
-}
-
-<h1>Delete Product</h1>
-
-<div>
-    <strong>ID:</strong> @Model.ProductId
-</div>
-<div>
-    <strong>Name:</strong> @Model.ProductName
-</div>
-<div>
-    <strong>Price:</strong> @Model.ProductPrice
-</div>
-<div>
-    <strong>Description:</strong> @Model.ProductDescription
-</div>
-<form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" name="id" value="@Model.ProductId">
-    <button type="submit">Delete</button>
-</form>
-<a href="/Product">Back to List</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Product</title>
+    <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Product</h1>
+        <div>
+            <strong>ID:</strong> @Model.ProductId
+        </div>
+        <div>
+            <strong>Name:</strong> @Model.ProductName
+        </div>
+        <div>
+            <strong>Price:</strong> @Model.ProductPrice
+        </div>
+        <div>
+            <strong>Description:</strong> @Model.ProductDescription
+        </div>
+        <form method="post" asp-action="Delete" asp-route-id="@Model.ProductId">
+            @Html.AntiForgeryToken()
+            <button type="submit">Delete</button>
+        </form>
+        <a href="/Product">Back to List</a>
+    </div>
+</body>
+</html>
