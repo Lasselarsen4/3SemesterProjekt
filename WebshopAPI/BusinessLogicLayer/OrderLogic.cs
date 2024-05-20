@@ -8,10 +8,12 @@ namespace WebshopAPI.BusinessLogicLayer
     public class OrderLogic : IOrderLogic
     {
         private readonly IOrderDB _orderDB;
+        private readonly IProductDB _productDB;
 
-        public OrderLogic(IOrderDB orderDB)
+        public OrderLogic(IOrderDB orderDB, IProductDB productDB)
         {
             _orderDB = orderDB;
+            _productDB = productDB;
         }
 
         public IEnumerable<Order> GetAllOrders()
@@ -27,6 +29,7 @@ namespace WebshopAPI.BusinessLogicLayer
         public void PlaceOrder(Order order)
         {
             _orderDB.Add(order);
+            UpdateProductStock(order); // Update stock after placing the order
         }
 
         public void UpdateOrder(Order updatedOrder)
@@ -37,6 +40,19 @@ namespace WebshopAPI.BusinessLogicLayer
         public void DeleteOrder(int orderId)
         {
             _orderDB.Delete(orderId);
+        }
+        
+        public void UpdateProductStock(Order order)
+        {
+            foreach (var orderLine in order.OrderLines)
+            {
+                var product = _productDB.GetById(orderLine.ProductId);
+                if (product != null)
+                {
+                    product.Stock -= orderLine.Quantity;
+                    _productDB.Update(product);
+                }
+            }
         }
     }
 }

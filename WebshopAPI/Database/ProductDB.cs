@@ -122,5 +122,21 @@ namespace WebshopAPI.Database
                 }
             }
         }
+        
+        public void UpdateProductStock(int productId, int quantity)
+        {
+            using (SqlConnection connection = _dbConnection.OpenConnection())
+            {
+                string query = "UPDATE Product SET Stock = Stock - @Quantity WHERE ProductId = @ProductId";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

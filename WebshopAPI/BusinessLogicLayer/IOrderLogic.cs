@@ -1,14 +1,12 @@
-﻿using ModelAPI;
-using System.Collections.Generic;
+﻿// IOrderLogic.cs
+using ModelAPI;
 
-namespace WebshopAPI.BusinessLogicLayer
+public interface IOrderLogic
 {
-    public interface IOrderLogic
-    {
-        IEnumerable<Order> GetAllOrders();
-        Order GetOrderById(int orderId);
-        void PlaceOrder(Order order);
-        void UpdateOrder(Order updatedOrder);
-        void DeleteOrder(int orderId);
-    }
+    IEnumerable<Order> GetAllOrders();
+    Order GetOrderById(int id);
+    void PlaceOrder(Order order);
+    void UpdateOrder(Order order);
+    void DeleteOrder(int id);
+    void UpdateProductStock(Order order);
 }
