@@ -2,7 +2,7 @@
 
 namespace WebshopApplication.Pages.Cart;
 
-public class RemoveItem : PageModel
+public class Edit : PageModel
 {
     public void OnGet()
     {

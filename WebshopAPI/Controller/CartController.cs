@@ -1,78 +1,85 @@
 using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
 using WebshopAPI.BusinessLogicLayer;
-using System.Security.Claims;
-using WebshopAPI.Database;
+using System.Collections.Generic;
+using System;
 
 namespace WebshopAPI.Controller
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
         private readonly ICartLogic _cartLogic;
-        private readonly IProductDB _productDB;
 
-        public CartController(ICartLogic cartLogic, IProductDB productDB)
+        public CartController(ICartLogic cartLogic)
         {
             _cartLogic = cartLogic;
-            _productDB = productDB;
         }
 
-        private string GetUserId()
+        [HttpGet]
+        public ActionResult<IEnumerable<Cart>> Get()
         {
-            // Example implementation, modify based on your authentication system
-            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? HttpContext.Session.Id;
+            var carts = _cartLogic.GetAllCarts();
+            return Ok(carts);
         }
 
-        [HttpGet("current")]
-        public ActionResult<Cart> GetCurrent()
+        [HttpGet("{id}")]
+        public ActionResult<Cart> Get(int id)
         {
-            var userId = GetUserId();
-            var cart = _cartLogic.GetCartByUser(userId);
-            if (cart != null)
+            var cart = _cartLogic.GetCartById(id);
+            if (cart == null)
             {
-                return Ok(cart);
+                return NotFound();
             }
-            return NotFound();
+            return Ok(cart);
         }
 
-        [HttpPost("create")]
-        public ActionResult<Cart> Create()
+        [HttpPost]
+        public ActionResult<Cart> Post([FromBody] Cart cart)
         {
-            var userId = GetUserId();
-            var newCart = _cartLogic.CreateCart(userId);
-            return CreatedAtAction(nameof(GetCurrent), new { }, newCart);
-        }
-
-        [HttpPost("items/add")]
-        public ActionResult<Cart> AddItem([FromBody] Product product, [FromQuery] int quantity = 1)
-        {
-            var userId = GetUserId();
-            var dbProduct = _productDB.GetById(product.ProductId);
-            if (dbProduct == null)
+            if (cart == null)
             {
-                return NotFound(); // Product not found
+                return BadRequest("Cart object is null");
             }
 
-            var cart = _cartLogic.AddItemToCart(userId, dbProduct, quantity);
-            if (cart != null)
+            try
             {
-                return Ok(cart);
+                _cartLogic.AddCart(cart);
+                return CreatedAtAction(nameof(Get), new { id = cart.CartId }, cart);
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to add cart: {ex.Message}");
+            }
         }
 
-        [HttpDelete("items/remove")]
-        public ActionResult<Cart> RemoveItem([FromQuery] int productId)
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Cart updatedCart)
         {
-            var userId = GetUserId();
-            var cart = _cartLogic.RemoveItemFromCart(userId, productId);
-            if (cart != null)
+           try
+           {
+               _cartLogic.UpdateCart(updatedCart);
+               return NoContent();
+           }
+           catch(Exception ex)
+           {
+               return NotFound($"Failed to update cart with ID {id}: {ex.Message}");
+           }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
             {
-                return Ok(cart);
+                _cartLogic.DeleteCart(id);
+                return NoContent();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return NotFound($"Failed to delete cart with ID {id}: {ex.Message}");
+            }
         }
     }
 }

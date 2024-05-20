@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ModelAPI
+﻿namespace ModelAPI
 {
     public class Cart
     {
+        public int CartId { get; set; }
+        public int CustomerId { get; set; }
         public List<CartItem> Items { get; set; }
         public DateTime CreatedAt { get; set; }
 

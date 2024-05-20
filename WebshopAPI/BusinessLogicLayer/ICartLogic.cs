@@ -1,13 +1,14 @@
-﻿using ModelAPI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ModelAPI;
 
 namespace WebshopAPI.BusinessLogicLayer
 {
     public interface ICartLogic
     {
-        Cart GetCartByUser(string userId);
-        Cart CreateCart(string userId);
-        Cart AddItemToCart(string userId, Product product, int quantity);
-        Cart RemoveItemFromCart(string userId, int productId);
+        IEnumerable<Cart> GetAllCarts();
+        Cart GetCartById(int id);
+        void AddCart(Cart cart);
+        void UpdateCart(Cart cart);
+        void DeleteCart(int id);
     }
 }

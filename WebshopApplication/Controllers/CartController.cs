@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using ModelAPI;
-using System.Security.Claims;
-using WebshopApplication.Models;
-using WebshopApplication.ServiceLayer;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using WebshopApplication.ServiceLayer;
+using System.Security.Claims;
+using ModelAPI;
+using WebshopApplication.Models;
+using System.Diagnostics;
 
 namespace WebshopApplication.Controllers
 {

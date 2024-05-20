@@ -1,51 +1,41 @@
-﻿using ModelAPI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ModelAPI;
 using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer
 {
     public class CartLogic : ICartLogic
     {
-        private static readonly Dictionary<string, Cart> UserCarts = new Dictionary<string, Cart>();
-        private readonly IProductDB _productDB;
+        private readonly ICartDB _cartDb;
 
-        public CartLogic(IProductDB productDB)
+        public CartLogic(ICartDB cartDb)
         {
-            _productDB = productDB;
+            _cartDb = cartDb;
         }
 
-        public Cart GetCartByUser(string userId)
+        public IEnumerable<Cart> GetAllCarts()
         {
-            UserCarts.TryGetValue(userId, out var cart);
-            return cart;
+            return _cartDb.GetAll();
         }
 
-        public Cart CreateCart(string userId)
+        public Cart GetCartById(int id)
         {
-            var newCart = new Cart();
-            UserCarts[userId] = newCart;
-            return newCart;
+            return _cartDb.GetById(id);
         }
 
-        public Cart AddItemToCart(string userId, Product product, int quantity = 1)
+        public void AddCart(Cart cart)
         {
-            if (!UserCarts.TryGetValue(userId, out var cart))
-            {
-                cart = CreateCart(userId);
-            }
-
-            cart.AddItem(product, quantity);
-            return cart;
+            _cartDb.Add(cart);
         }
 
-        public Cart RemoveItemFromCart(string userId, int productId)
+        public void UpdateCart(Cart cart)
         {
-            if (UserCarts.TryGetValue(userId, out var cart))
-            {
-                cart.RemoveItem(productId);
-                return cart;
-            }
-            return null;
+            _cartDb.Update(cart);
+        }
+
+        public void DeleteCart(int id)
+        {
+            _cartDb.Delete(id);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using ModelAPI;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
 {

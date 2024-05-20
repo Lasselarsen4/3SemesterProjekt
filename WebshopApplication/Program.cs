@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using WebshopApplication.ServiceLayer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,9 +11,21 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Ensure IConfiguration is available for dependency injection
 
-builder.Services.AddHttpClient<ICartService, CartService>();
-builder.Services.AddHttpClient<IProductService, ProductService>();
-builder.Services.AddScoped<IServiceConnection, ServiceConnection>();
+// Register your services here
+builder.Services.AddSingleton<ICartService, CartService>();
+builder.Services.AddSingleton<IProductService, ProductService>(); // If you have ProductService
+builder.Services.AddSingleton<ICustomerService, CustomerService>();
+builder.Services.AddSingleton<IOrderService, OrderService>();
+builder.Services.AddSingleton<IOrderLineService, OrderLineService>();
+
+// Add session services
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout as required
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -26,6 +40,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Add session middleware
+app.UseSession();
 
 app.UseAuthorization();
 

@@ -5,12 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart Details</title>
+    <title>Delete Cart</title>
     <link rel="stylesheet" href="~/css/styles.css">
 </head>
 <body>
 <div class="container">
-    <h1>Cart Details</h1>
+    <h1>Delete Cart</h1>
     <div>
         <strong>ID:</strong> @Model.CartId
     </div>
@@ -20,15 +20,10 @@
     <div>
         <strong>Created At:</strong> @Model.CreatedAt
     </div>
-    <div>
-        <strong>Items:</strong>
-        <ul>
-            @foreach (var item in Model.Items)
-            {
-                <li>@item.Product.ProductName - @item.Quantity</li>
-            }
-        </ul>
-    </div>
+    <form method="post" asp-action="Delete" asp-route-id="@Model.CartId">
+        @Html.AntiForgeryToken()
+        <button type="submit">Delete</button>
+    </form>
     <a href="/Cart">Back to List</a>
 </div>
 </body>
