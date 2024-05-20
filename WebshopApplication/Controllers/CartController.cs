@@ -22,6 +22,8 @@ namespace WebshopApplication.Controllers
         public IActionResult Index()
         {
             var cartItems = _cartService.GetCartItems();
+            var totalPrice = _cartService.GetTotalPrice();
+            ViewBag.TotalPrice = totalPrice;
             return View(cartItems);
         }
 
@@ -56,14 +58,6 @@ namespace WebshopApplication.Controllers
         {
             _cartService.RemoveFromCart(productId);
             return RedirectToAction(nameof(Index));
-        }
-
-        // GET: /Cart/Total
-        [HttpGet("Total")]
-        public IActionResult Total()
-        {
-            var total = _cartService.GetTotalPrice();
-            return View(total);
         }
     }
 }
