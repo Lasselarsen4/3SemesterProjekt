@@ -1,0 +1,22 @@
+@model ModelAPI.OrderLine
+
+@{
+    ViewData["Title"] = "Edit Order Line";
+}
+
+<h1>Edit Order Line</h1>
+
+<form asp-action="Edit" method="post">
+    <div>
+        <input type="hidden" id="OrderId" name="OrderId" value="@Model.OrderId">
+    </div>
+    <div>
+        <input type="hidden" id="ProductId" name="ProductId" value="@Model.ProductId">
+    </div>
+    <div>
+        <label for="Quantity">Quantity:</label>
+        <input type="number" id="Quantity" name="Quantity" value="@Model.Quantity" required>
+    </div>
+    <button type="submit">Save Changes</button>
+</form>
+<a href="/OrderLine">Back to List</a>

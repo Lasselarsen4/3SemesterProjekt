@@ -35,15 +35,16 @@ namespace WebshopAPI.Database
             return orderLines;
         }
 
-        public OrderLine GetById(int id)
+        public OrderLine GetById(int orderId, int productId)
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "SELECT quantity, orderId_FK, productId_FK FROM OrderLine WHERE orderLineId = @Id";
+                string query = "SELECT quantity, orderId_FK, productId_FK FROM OrderLine WHERE orderId_FK = @OrderId AND productId_FK = @ProductId";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    command.Parameters.AddWithValue("@ProductId", productId);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -55,7 +56,7 @@ namespace WebshopAPI.Database
                 }
             }
 
-            return null; // Return null if order line with specified ID is not found
+            return null; // Return null if order line with specified IDs is not found
         }
 
         public void Add(OrderLine orderLine)
@@ -75,33 +76,33 @@ namespace WebshopAPI.Database
             }
         }
 
-        public void Update(int id, OrderLine orderLine)
+        public void Update(int orderId, int productId, OrderLine orderLine)
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "UPDATE OrderLine SET quantity = @Quantity, orderId_FK = @OrderId, productId_FK = @ProductId WHERE orderLineId = @Id";
+                string query = "UPDATE OrderLine SET quantity = @Quantity WHERE orderId_FK = @OrderId AND productId_FK = @ProductId";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    command.Parameters.AddWithValue("@ProductId", productId);
                     command.Parameters.AddWithValue("@Quantity", orderLine.Quantity);
-                    command.Parameters.AddWithValue("@OrderId", orderLine.OrderId);
-                    command.Parameters.AddWithValue("@ProductId", orderLine.ProductId);
 
                     command.ExecuteNonQuery();
                 }
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int orderId, int productId)
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "DELETE FROM OrderLine WHERE orderLineId = @Id";
+                string query = "DELETE FROM OrderLine WHERE orderId_FK = @OrderId AND productId_FK = @ProductId";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    command.Parameters.AddWithValue("@ProductId", productId);
 
                     command.ExecuteNonQuery();
                 }

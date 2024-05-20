@@ -1,0 +1,43 @@
+@model IEnumerable<ModelAPI.OrderLine>
+
+@{
+    ViewData["Title"] = "Order Line Index";
+}
+
+<h1>Order Line Index</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().OrderId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ProductId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Quantity)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-orderId="@item.OrderId" asp-route-productId="@item.ProductId">Edit</a> |
+                <a asp-action="Delete" asp-route-orderId="@item.OrderId" asp-route-productId="@item.ProductId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

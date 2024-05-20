@@ -1,7 +1,6 @@
 ﻿using ModelAPI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer
@@ -20,9 +19,9 @@ namespace WebshopAPI.BusinessLogicLayer
             return _orderLineDB.GetAll();
         }
 
-        public OrderLine GetOrderLineById(int id)
+        public OrderLine GetOrderLineById(int orderId, int productId)
         {
-            return _orderLineDB.GetById(id);
+            return _orderLineDB.GetById(orderId, productId);
         }
 
         public void AddOrderLine(OrderLine orderLine)
@@ -37,7 +36,7 @@ namespace WebshopAPI.BusinessLogicLayer
             _orderLineDB.Add(orderLine);
         }
 
-        public void UpdateOrderLine(int id, OrderLine updatedOrderLine)
+        public void UpdateOrderLine(int orderId, int productId, OrderLine updatedOrderLine)
         {
             if (updatedOrderLine == null)
             {
@@ -46,13 +45,12 @@ namespace WebshopAPI.BusinessLogicLayer
 
             // Optionally, you can validate the updated order line here before updating it.
 
-            _orderLineDB.Update(id, updatedOrderLine);
-
+            _orderLineDB.Update(orderId, productId, updatedOrderLine);
         }
 
-        public void DeleteOrderLine(int id)
+        public void DeleteOrderLine(int orderId, int productId)  // Implementing the missing method
         {
-            _orderLineDB.Delete(id);
+            _orderLineDB.Delete(orderId, productId);
         }
     }
 }

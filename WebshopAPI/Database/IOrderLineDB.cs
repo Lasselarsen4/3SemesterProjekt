@@ -6,13 +6,9 @@ namespace WebshopAPI.Database
     public interface IOrderLineDB
     {
         IEnumerable<OrderLine> GetAll();
-
-        OrderLine GetById(int id);
-
+        OrderLine GetById(int orderId, int productId);
         void Add(OrderLine orderLine);
-
-        void Update(int id, OrderLine orderLine);
-
-        void Delete(int id);
+        void Update(int orderId, int productId, OrderLine orderLine);
+        void Delete(int orderId, int productId);
     }
 }
