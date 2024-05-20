@@ -1,3 +1,5 @@
+using WebshopApplication.ServiceLayer;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,10 @@ builder.Services.AddControllers(); // This adds controller support
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Ensure IConfiguration is available for dependency injection
+
+builder.Services.AddHttpClient<ICartService, CartService>();
+builder.Services.AddHttpClient<IProductService, ProductService>();
+builder.Services.AddScoped<IServiceConnection, ServiceConnection>();
 
 var app = builder.Build();
 

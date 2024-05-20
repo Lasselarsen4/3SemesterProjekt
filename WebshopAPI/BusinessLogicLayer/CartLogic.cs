@@ -1,51 +1,51 @@
 ﻿using ModelAPI;
 using System.Collections.Generic;
+using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer
 {
     public class CartLogic : ICartLogic
     {
-        private static readonly Dictionary<int, Cart> _carts = new Dictionary<int, Cart>();
+        private static readonly Dictionary<string, Cart> UserCarts = new Dictionary<string, Cart>();
+        private readonly IProductDB _productDB;
 
-        public Cart GetCartById(int cartId)
+        public CartLogic(IProductDB productDB)
         {
-            if (_carts.TryGetValue(cartId, out var cart))
-            {
-                return cart;
-            }
-            else
-            {
-                return null;
-            }
+            _productDB = productDB;
         }
 
-        public Cart AddItemToCart(int cartId, Product product, int quantity = 1)
+        public Cart GetCartByUser(string userId)
         {
-            if (_carts.TryGetValue(cartId, out var cart))
-            {
-                cart.AddItem(product, quantity);
-                return cart;
-            }
-            else
-            {
-                var newCart = new Cart();
-                newCart.AddItem(product, quantity);
-                _carts.Add(newCart.CartId, newCart);
-                return newCart;
-            }
+            UserCarts.TryGetValue(userId, out var cart);
+            return cart;
         }
 
-        public Cart RemoveItemFromCart(int cartId, int productId)
+        public Cart CreateCart(string userId)
         {
-            if (_carts.TryGetValue(cartId, out var cart))
+            var newCart = new Cart();
+            UserCarts[userId] = newCart;
+            return newCart;
+        }
+
+        public Cart AddItemToCart(string userId, Product product, int quantity = 1)
+        {
+            if (!UserCarts.TryGetValue(userId, out var cart))
+            {
+                cart = CreateCart(userId);
+            }
+
+            cart.AddItem(product, quantity);
+            return cart;
+        }
+
+        public Cart RemoveItemFromCart(string userId, int productId)
+        {
+            if (UserCarts.TryGetValue(userId, out var cart))
             {
                 cart.RemoveItem(productId);
                 return cart;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }

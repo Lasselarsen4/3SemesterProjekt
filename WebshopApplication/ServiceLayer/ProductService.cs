@@ -18,6 +18,18 @@ namespace WebshopApplication.ServiceLayer
             _serviceConnection = new ServiceConnection(baseUrl);
         }
 
+        public async Task<Product> GetById(int productId)
+        {
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product/{productId}";
+            var response = await _serviceConnection.CallServiceGet();
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Product>(content);
+            }
+            return null;
+        }
+
         public async Task<List<Product>> GetProducts(string sortParam, int id = -1)
         {
             _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/product";
