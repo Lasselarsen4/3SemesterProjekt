@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ModelAPI;
 using WebshopAPI.BusinessLogicLayer;
-using System.Collections.Generic;
-using System;
+using WebshopAPI.Database;
+using ModelAPI;
 
 namespace WebshopAPI.Controller
 {
@@ -10,76 +9,51 @@ namespace WebshopAPI.Controller
     [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
-        private readonly ICartLogic _cartLogic;
+        private readonly IProductLogic _productLogic;
+        private static Cart _cart = new Cart();
 
-        public CartController(ICartLogic cartLogic)
+        public CartController(IProductLogic productLogic)
         {
-            _cartLogic = cartLogic;
+            _productLogic = productLogic;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Cart>> Get()
+        public ActionResult<IEnumerable<CartItem>> Get()
         {
-            var carts = _cartLogic.GetAllCarts();
-            return Ok(carts);
+            return Ok(_cart.Items);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Cart> Get(int id)
+        [HttpPost("add/{productId}")]
+        public ActionResult Add(int productId, [FromQuery] int quantity)
         {
-            var cart = _cartLogic.GetCartById(id);
-            if (cart == null)
+            var product = _productLogic.GetProductById(productId);
+            if (product == null)
             {
-                return NotFound();
+                return NotFound("Product not found");
             }
-            return Ok(cart);
+
+            _cart.AddItem(product, quantity);
+            return Ok(_cart.Items);
         }
 
-        [HttpPost]
-        public ActionResult<Cart> Post([FromBody] Cart cart)
+        [HttpPut("update/{productId}")]
+        public ActionResult Update(int productId, [FromQuery] int quantity)
         {
-            if (cart == null)
-            {
-                return BadRequest("Cart object is null");
-            }
-
-            try
-            {
-                _cartLogic.AddCart(cart);
-                return CreatedAtAction(nameof(Get), new { id = cart.CartId }, cart);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Failed to add cart: {ex.Message}");
-            }
+            _cart.UpdateItem(productId, quantity);
+            return Ok(_cart.Items);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Cart updatedCart)
+        [HttpDelete("remove/{productId}")]
+        public ActionResult Remove(int productId)
         {
-           try
-           {
-               _cartLogic.UpdateCart(updatedCart);
-               return NoContent();
-           }
-           catch(Exception ex)
-           {
-               return NotFound($"Failed to update cart with ID {id}: {ex.Message}");
-           }
+            _cart.RemoveItem(productId);
+            return Ok(_cart.Items);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpGet("total")]
+        public ActionResult<decimal> GetTotal()
         {
-            try
-            {
-                _cartLogic.DeleteCart(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return NotFound($"Failed to delete cart with ID {id}: {ex.Message}");
-            }
+            return Ok(_cart.GetTotalPrice());
         }
     }
 }

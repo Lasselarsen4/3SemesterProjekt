@@ -5,10 +5,10 @@ namespace WebshopAPI.BusinessLogicLayer
 {
     public interface ICartLogic
     {
-        IEnumerable<Cart> GetAllCarts();
-        Cart GetCartById(int id);
-        void AddCart(Cart cart);
-        void UpdateCart(Cart cart);
-        void DeleteCart(int id);
+        Cart GetCart();
+        void AddToCart(Product product, int quantity);
+        void UpdateCartItem(int productId, int quantity);
+        void RemoveFromCart(int productId);
+        decimal GetTotalPrice();
     }
 }

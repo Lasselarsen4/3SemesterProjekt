@@ -20,7 +20,6 @@ builder.Services.AddScoped<IProductDB, ProductDB>();
 builder.Services.AddScoped<IOrderDB, OrderDB>();
 builder.Services.AddScoped<ICustomerDB, CustomerDB>();
 builder.Services.AddScoped<IOrderLineDB, OrderLineDB>();
-builder.Services.AddScoped<ICartDB, CartDB>();
 
 var app = builder.Build();
 

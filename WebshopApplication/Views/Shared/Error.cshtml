@@ -5,8 +5,14 @@
     <p>An error occurred while processing your request.</p>
     @if (Model.ShowRequestId)
     {
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
+        <p>
+            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        </p>
+    }
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <p>
+            <strong>Error Message:</strong> <code>@Model.Message</code>
+        </p>
     }
 </div>

@@ -1,41 +1,62 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ModelAPI;
-using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer
 {
     public class CartLogic : ICartLogic
     {
-        private readonly ICartDB _cartDb;
+        private readonly Cart _cart = new Cart();
 
-        public CartLogic(ICartDB cartDb)
+        public Cart GetCart()
         {
-            _cartDb = cartDb;
+            return _cart;
         }
 
-        public IEnumerable<Cart> GetAllCarts()
+        public void AddToCart(Product product, int quantity)
         {
-            return _cartDb.GetAll();
+            var existingItem = _cart.Items.FirstOrDefault(i => i.ProductId == product.ProductId);
+            if (existingItem == null)
+            {
+                _cart.Items.Add(new CartItem
+                {
+                    ProductId = product.ProductId,
+                    ProductName = product.ProductName,
+                    ProductPrice = product.ProductPrice,
+                    Quantity = quantity
+                });
+            }
+            else
+            {
+                existingItem.Quantity += quantity;
+            }
         }
 
-        public Cart GetCartById(int id)
+        public void UpdateCartItem(int productId, int quantity)
         {
-            return _cartDb.GetById(id);
+            var item = _cart.Items.FirstOrDefault(i => i.ProductId == productId);
+            if (item != null)
+            {
+                item.Quantity = quantity;
+                if (item.Quantity <= 0)
+                {
+                    _cart.Items.Remove(item);
+                }
+            }
         }
 
-        public void AddCart(Cart cart)
+        public void RemoveFromCart(int productId)
         {
-            _cartDb.Add(cart);
+            var item = _cart.Items.FirstOrDefault(i => i.ProductId == productId);
+            if (item != null)
+            {
+                _cart.Items.Remove(item);
+            }
         }
 
-        public void UpdateCart(Cart cart)
+        public decimal GetTotalPrice()
         {
-            _cartDb.Update(cart);
-        }
-
-        public void DeleteCart(int id)
-        {
-            _cartDb.Delete(id);
+            return _cart.GetTotalPrice();
         }
     }
 }

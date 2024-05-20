@@ -2,47 +2,52 @@
 {
     public class Cart
     {
-        public int CartId { get; set; }
-        public int CustomerId { get; set; }
-        public List<CartItem> Items { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public List<CartItem> Items { get; set; } = new List<CartItem>();
 
-        public Cart()
+        public void AddItem(Product product, int quantity)
         {
-            Items = new List<CartItem>();
-            CreatedAt = DateTime.UtcNow;
-        }
-
-        public void AddItem(Product product, int quantity = 1)
-        {
-            var existingItem = Items.Find(item => item.Product.ProductId == product.ProductId);
-            if (existingItem != null)
+            var existingItem = Items.FirstOrDefault(i => i.ProductId == product.ProductId);
+            if (existingItem == null)
             {
-                existingItem.Quantity += quantity;
+                Items.Add(new CartItem
+                {
+                    ProductId = product.ProductId,
+                    ProductName = product.ProductName,
+                    ProductPrice = product.ProductPrice,
+                    Quantity = quantity
+                });
             }
             else
             {
-                Items.Add(new CartItem { Product = product, Quantity = quantity });
+                existingItem.Quantity += quantity;
+            }
+        }
+
+        public void UpdateItem(int productId, int quantity)
+        {
+            var item = Items.FirstOrDefault(i => i.ProductId == productId);
+            if (item != null)
+            {
+                item.Quantity = quantity;
+                if (item.Quantity <= 0)
+                {
+                    Items.Remove(item);
+                }
             }
         }
 
         public void RemoveItem(int productId)
         {
-            var itemToRemove = Items.Find(item => item.Product.ProductId == productId);
-            if (itemToRemove != null)
+            var item = Items.FirstOrDefault(i => i.ProductId == productId);
+            if (item != null)
             {
-                Items.Remove(itemToRemove);
+                Items.Remove(item);
             }
         }
 
-        public decimal CalculateTotal()
+        public decimal GetTotalPrice()
         {
-            decimal total = 0;
-            foreach (var item in Items)
-            {
-                total += item.Product.ProductPrice * item.Quantity;
-            }
-            return total;
+            return Items.Sum(i => i.GetTotalPrice());
         }
     }
 }

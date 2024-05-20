@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using WebshopApplication.Models;
 using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
 {
     public interface ICartService
     {
-        Task<Cart> GetCartByUser(string userId);
-        Task<Cart> CreateCart(string userId);
-        Task<Cart> AddItemToCart(string userId, Product product, int quantity);
-        Task<Cart> RemoveItemFromCart(string userId, int productId);
+        IEnumerable<CartItem> GetCartItems();
+        void AddToCart(Product product, int quantity);
+        void UpdateCartItem(int productId, int quantity);
+        void RemoveFromCart(int productId);
+        decimal GetTotalPrice();
     }
 }

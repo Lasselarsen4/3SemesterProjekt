@@ -1,79 +1,69 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebshopApplication.ServiceLayer;
-using System.Security.Claims;
-using ModelAPI;
 using WebshopApplication.Models;
-using System.Diagnostics;
+using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.Controllers
 {
     [Route("[controller]")]
     public class CartController : Controller
     {
-        private readonly ICartService _cartService;
         private readonly IProductService _productService;
+        private readonly ICartService _cartService;
 
-        public CartController(ICartService cartService, IProductService productService)
+        public CartController(IProductService productService, ICartService cartService)
         {
-            _cartService = cartService;
             _productService = productService;
+            _cartService = cartService;
         }
 
-        private string GetUserId()
-        {
-            // Example implementation, modify based on your authentication system
-            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? HttpContext.Session.Id;
-        }
-
+        // GET: /Cart
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var userId = GetUserId();
-            var cart = await _cartService.GetCartByUser(userId);
-            if (cart != null)
-            {
-                return View(cart);
-            }
-            return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var cartItems = _cartService.GetCartItems();
+            return View(cartItems);
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create()
+        // POST: /Cart/Add
+        [HttpPost("Add")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(int productId, int quantity)
         {
-            var userId = GetUserId();
-            var newCart = await _cartService.CreateCart(userId);
+            var product = await _productService.GetById(productId);
+            if (product == null)
+            {
+                return NotFound("Product not found");
+            }
+
+            _cartService.AddToCart(product, quantity);
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost("items/add")]
-        public async Task<IActionResult> AddItem(int productId, int quantity = 1)
+        // POST: /Cart/Update
+        [HttpPost("Update")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(int productId, int quantity)
         {
-            var userId = GetUserId();
-            var dbProduct = await _productService.GetById(productId);
-            if (dbProduct == null)
-            {
-                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-            }
-
-            var cart = await _cartService.AddItemToCart(userId, dbProduct, quantity);
-            if (cart != null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            _cartService.UpdateCartItem(productId, quantity);
+            return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost("items/remove")]
-        public async Task<IActionResult> RemoveItem(int productId)
+        // POST: /Cart/Remove
+        [HttpPost("Remove")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Remove(int productId)
         {
-            var userId = GetUserId();
-            var cart = await _cartService.RemoveItemFromCart(userId, productId);
-            if (cart != null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            _cartService.RemoveFromCart(productId);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: /Cart/Total
+        [HttpGet("Total")]
+        public IActionResult Total()
+        {
+            var total = _cartService.GetTotalPrice();
+            return View(total);
         }
     }
 }

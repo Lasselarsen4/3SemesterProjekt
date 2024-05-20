@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebshopApplication.Pages.Cart;
 
-public class Edit : PageModel
+public class Total : PageModel
 {
     public void OnGet()
     {
