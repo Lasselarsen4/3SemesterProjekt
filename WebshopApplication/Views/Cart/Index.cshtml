@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
-    <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
 </head>
 <body>
 <div class="container">
@@ -50,6 +51,7 @@
 
     <h3>Total Price: @ViewBag.TotalPrice</h3>
     <a href="/Product">Continue Shopping</a>
+    <a class="btn btn-primary" href="/Cart/Checkout">Checkout</a>
 </div>
 </body>
 </html>
