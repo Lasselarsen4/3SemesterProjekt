@@ -57,7 +57,9 @@ namespace WebshopApplication.ServiceLayer
                 order.OrderDate,
                 order.DeliveryDate,
                 order.TotalPrice,
-                order.CustomerId_FK
+                order.CustomerId_FK,
+                order.OrderLines
+                
             };
 
             var json = JsonConvert.SerializeObject(orderForInsert);

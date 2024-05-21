@@ -55,7 +55,7 @@ namespace WebshopApplication.Controllers
                 var order = new Order
                 {
                     OrderDate = DateTime.Now,
-                    DeliveryDate = DateTime.Now.AddDays(7), // Example delivery date
+                    DeliveryDate = DateTime.Now.AddDays(7),
                     TotalPrice = _cartService.GetTotalPrice(),
                     CustomerId_FK = customer.CustomerId,
                     OrderLines = new List<OrderLine>()
