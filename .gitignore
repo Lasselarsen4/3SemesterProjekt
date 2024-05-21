@@ -105,8 +105,7 @@ obj/
 # Ignore cache files
 *.cache
 
-# Ignore JSON files
-*.json
+
 
 # Ignore props files
 *.props
