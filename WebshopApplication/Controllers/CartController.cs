@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using WebshopApplication.Models;
 using WebshopApplication.ServiceLayer;
-using ModelAPI;
+
 
 namespace WebshopApplication.Controllers
 {
@@ -49,7 +49,7 @@ namespace WebshopApplication.Controllers
             {
                 // Save customer information
                 await _customerService.SaveCustomer(customer);
-
+/*
                 // Create order
                 var cartItems = _cartService.GetCartItems();
                 var order = new Order
@@ -73,14 +73,14 @@ namespace WebshopApplication.Controllers
 
                 // Save order
                 await _orderService.SaveOrder(order);
-
+*/
                 // Clear the cart
                 _cartService.ClearCart();
 
                 return RedirectToAction("OrderConfirmation");
             }
 
-            return View("Checkout", customer);
+            return View("Checkout", null);
         }
 
         // GET: /Cart/OrderConfirmation

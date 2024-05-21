@@ -58,7 +58,6 @@ namespace WebshopApplication.ServiceLayer
                 order.DeliveryDate,
                 order.TotalPrice,
                 order.CustomerId_FK,
-                order.OrderLines
                 
             };
 
