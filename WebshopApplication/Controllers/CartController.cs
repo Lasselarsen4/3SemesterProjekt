@@ -72,7 +72,7 @@ namespace WebshopApplication.Controllers
                     OrderDate = DateTime.Now,
                     DeliveryDate = DateTime.Now.AddDays(7),
                     TotalPrice = _cartService.GetTotalPrice(),
-                    CustomerId_FK = savedCustomer.CustomerId,
+                    CustomerId = savedCustomer.CustomerId,
                     OrderLines = cartItems.Select(item => new OrderLine
                     {
                         ProductId = item.ProductId,

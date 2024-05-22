@@ -3,13 +3,13 @@ namespace ModelAPI
 {
     public class Order
     {
-        public Order(int orderId, DateTime orderDate, DateTime deliveryDate, decimal totalPrice, int customerId_FK)
+        public Order(int orderId, DateTime orderDate, DateTime deliveryDate, decimal totalPrice, int customerId)
         {
             OrderId = orderId;
             OrderDate = orderDate;
             DeliveryDate = deliveryDate;
             TotalPrice = totalPrice;
-            CustomerId_FK = customerId_FK;
+            CustomerId = customerId;
             OrderLines = new List<OrderLine>();
         }
 
@@ -22,7 +22,7 @@ namespace ModelAPI
         public DateTime OrderDate { get; set; }
         public DateTime DeliveryDate { get; set; }
         public decimal TotalPrice { get; set; }
-        public int CustomerId_FK { get; set; }
+        public int CustomerId { get; set; }
         public List<OrderLine> OrderLines { get; set; }
         public Customer Cust { get; set; }
     }

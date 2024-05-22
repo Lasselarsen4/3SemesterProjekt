@@ -24,7 +24,7 @@
             <strong>Total Price:</strong> @Model.TotalPrice
         </div>
         <div>
-            <strong>Customer ID:</strong> @Model.CustomerId_FK
+            <strong>Customer ID:</strong> @Model.CustomerId
         </div>
         <form method="post" asp-action="Delete" asp-route-id="@Model.OrderId">
             @Html.AntiForgeryToken()

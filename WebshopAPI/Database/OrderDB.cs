@@ -81,7 +81,7 @@ namespace WebshopAPI.Database
                     command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
                     command.Parameters.AddWithValue("@DeliveryDate", order.DeliveryDate);
                     command.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
-                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId_FK);
+                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId);
 
                     command.ExecuteNonQuery();
                 }

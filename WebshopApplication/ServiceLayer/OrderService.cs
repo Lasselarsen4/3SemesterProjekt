@@ -59,7 +59,7 @@ namespace WebshopApplication.ServiceLayer
                     order.OrderDate,
                     order.DeliveryDate,
                     order.TotalPrice,
-                    order.CustomerId_FK,
+                    order.CustomerId,
                     order.Cust, // Include the customer object
                     order.OrderLines // Ensure order lines are included
                 };
