@@ -45,49 +45,47 @@ namespace WebshopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Attempt to save the customer
                 var customerSaved = await _customerService.SaveCustomer(customer);
-                if (!customerSaved)
+                if (customerSaved)
                 {
-                    return View("Checkout", customer);
-                }
+                    // Retrieve the saved customer
+                    var savedCustomer = (await _customerService.GetCustomers("none"))
+                        .FirstOrDefault(c => c.Email == customer.Email && c.Phone == customer.Phone);
 
-                var savedCustomer = (await _customerService.GetCustomers("none"))
-                    .FirstOrDefault(c => c.Email == customer.Email && c.Phone == customer.Phone);
-
-                if (savedCustomer == null)
-                {
-                    return View("Checkout", customer);
-                }
-
-                var cartItems = _cartService.GetCartItems();
-                var order = new Order
-                {
-                    Cust = savedCustomer,
-                    OrderDate = DateTime.Now,
-                    DeliveryDate = DateTime.Now.AddDays(7),
-                    TotalPrice = _cartService.GetTotalPrice(),
-                    CustomerId = savedCustomer.CustomerId,
-                    OrderLines = cartItems.Select(item => new OrderLine
+                    if (savedCustomer != null)
                     {
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity
-                    }).ToList()
-                };
+                        // Retrieve cart items
+                        var cartItems = _cartService.GetCartItems();
+                        if (cartItems.Any())
+                        {
+                            // Create the order
+                            var order = new Order
+                            {
+                                Cust = savedCustomer,
+                                OrderDate = DateTime.Now,
+                                DeliveryDate = DateTime.Now.AddDays(7),
+                                TotalPrice = _cartService.GetTotalPrice(),
+                                CustomerId = savedCustomer.CustomerId,
+                                OrderLines = cartItems.Select(item => new OrderLine
+                                {
+                                    ProductId = item.ProductId,
+                                    Quantity = item.Quantity
+                                }).ToList()
+                            };
 
-                System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(order));
-
-                var orderSaved = await _orderService.SaveOrder(order);
-                if (!orderSaved)
-                {
-                    return View("Checkout", customer);
+                            // Attempt to save the order
+                            var orderSaved = await _orderService.SaveOrder(order);
+                        }
+                    }
                 }
-
-                _cartService.ClearCart();
-
-                return RedirectToAction("OrderConfirmation");
             }
 
-            return View("Checkout", customer);
+            // Always clear the cart regardless of the outcome
+            _cartService.ClearCart();
+
+            // Redirect to OrderConfirmation
+            return RedirectToAction("OrderConfirmation");
         }
 
         [HttpGet("OrderConfirmation")]
