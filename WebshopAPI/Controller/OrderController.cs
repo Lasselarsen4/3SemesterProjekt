@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
 using WebshopAPI.BusinessLogicLayer;
 using System;
+using System.Collections.Generic;
 
 namespace WebshopAPI.Controller
 {
@@ -16,11 +17,28 @@ namespace WebshopAPI.Controller
             _orderLogic = orderLogic;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Order>> Get()
+        [HttpPost]
+        public ActionResult<Order> Post([FromBody] Order order)
         {
-            var orders = _orderLogic.GetAllOrders();
-            return Ok(orders);
+            if (order == null)
+            {
+                return BadRequest("Order object is null");
+            }
+
+            try
+            {
+                foreach (var orderLine in order.OrderLines)
+                {
+                    // Validate order line if necessary
+                }
+
+                _orderLogic.PlaceOrder(order);
+                return CreatedAtAction(nameof(Get), new { id = order.OrderId }, order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to place order: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
@@ -34,23 +52,11 @@ namespace WebshopAPI.Controller
             return Ok(order);
         }
 
-        [HttpPost]
-        public ActionResult<Order> Post([FromBody] Order order)
+        [HttpGet]
+        public ActionResult<IEnumerable<Order>> Get()
         {
-            if (order == null)
-            {
-                return BadRequest("Order object is null");
-            }
-
-            try
-            {
-                _orderLogic.PlaceOrder(order);
-                return CreatedAtAction(nameof(Get), new { id = order.OrderId }, order);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Failed to place order: {ex.Message}");
-            }
+            var orders = _orderLogic.GetAllOrders();
+            return Ok(orders);
         }
 
         [HttpPut("{id}")]

@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using WebshopApplication.Models;
 using WebshopApplication.ServiceLayer;
 
@@ -23,7 +24,6 @@ namespace WebshopApplication.Controllers
             _customerService = customerService;
         }
 
-        // GET: /Cart
         [HttpGet]
         public IActionResult Index()
         {
@@ -33,7 +33,6 @@ namespace WebshopApplication.Controllers
             return View(cartItems);
         }
 
-        // GET: /Cart/Checkout
         [HttpGet("Checkout")]
         public IActionResult Checkout()
         {
@@ -46,29 +45,24 @@ namespace WebshopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Save customer information
                 var customerSaved = await _customerService.SaveCustomer(customer);
                 if (!customerSaved)
                 {
-                    // Handle error (e.g., return error view or message)
                     return View("Checkout", customer);
                 }
 
-                // Retrieve customer ID (assuming the customer is saved and has a valid ID)
                 var savedCustomer = (await _customerService.GetCustomers("none"))
                     .FirstOrDefault(c => c.Email == customer.Email && c.Phone == customer.Phone);
 
                 if (savedCustomer == null)
                 {
-                    // Handle error (e.g., return error view or message)
                     return View("Checkout", customer);
                 }
 
-                // Create order
                 var cartItems = _cartService.GetCartItems();
                 var order = new Order
                 {
-                    Cust = savedCustomer, // Include the customer object
+                    Cust = savedCustomer,
                     OrderDate = DateTime.Now,
                     DeliveryDate = DateTime.Now.AddDays(7),
                     TotalPrice = _cartService.GetTotalPrice(),
@@ -80,15 +74,14 @@ namespace WebshopApplication.Controllers
                     }).ToList()
                 };
 
-                // Save order
+                System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(order));
+
                 var orderSaved = await _orderService.SaveOrder(order);
                 if (!orderSaved)
                 {
-                    // Handle error (e.g., return error view or message)
                     return View("Checkout", customer);
                 }
 
-                // Clear the cart
                 _cartService.ClearCart();
 
                 return RedirectToAction("OrderConfirmation");
@@ -97,14 +90,12 @@ namespace WebshopApplication.Controllers
             return View("Checkout", customer);
         }
 
-        // GET: /Cart/OrderConfirmation
         [HttpGet("OrderConfirmation")]
         public IActionResult OrderConfirmation()
         {
             return View();
         }
 
-        // POST: /Cart/Add
         [HttpPost("Add")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(int productId, int quantity)
@@ -119,7 +110,6 @@ namespace WebshopApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Cart/Update
         [HttpPost("Update")]
         [ValidateAntiForgeryToken]
         public IActionResult Update(int productId, int quantity)
@@ -128,7 +118,6 @@ namespace WebshopApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Cart/Remove
         [HttpPost("Remove")]
         [ValidateAntiForgeryToken]
         public IActionResult Remove(int productId)

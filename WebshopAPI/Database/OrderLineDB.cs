@@ -39,7 +39,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "SELECT quantity, orderId_FK, productId_FK FROM OrderLine WHERE orderId_FK = @OrderId AND productId_FK = @ProductId";
+                string query = "SELECT * FROM OrderLine WHERE orderId_FK = @OrderId AND productId_FK = @ProductId";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -56,7 +56,7 @@ namespace WebshopAPI.Database
                 }
             }
 
-            return null; // Return null if order line with specified IDs is not found
+            return null;
         }
 
         public void Add(OrderLine orderLine)

@@ -1,7 +1,7 @@
-﻿using ModelAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using ModelAPI;
 
 namespace WebshopAPI.Database
 {
@@ -74,16 +74,44 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "INSERT INTO [Order] (orderDate, deliveryDate, totalPrice, customerId_FK) VALUES (@OrderDate, @DeliveryDate, @TotalPrice, @CustomerId)";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (var transaction = connection.BeginTransaction())
                 {
-                    command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
-                    command.Parameters.AddWithValue("@DeliveryDate", order.DeliveryDate);
-                    command.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
-                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+                    try
+                    {
+                        string query = "INSERT INTO [Order] (orderDate, deliveryDate, totalPrice, customerId_FK) OUTPUT INSERTED.orderId VALUES (@OrderDate, @DeliveryDate, @TotalPrice, @CustomerId)";
 
-                    command.ExecuteNonQuery();
+                        using (SqlCommand command = new SqlCommand(query, connection, transaction))
+                        {
+                            command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
+                            command.Parameters.AddWithValue("@DeliveryDate", order.DeliveryDate);
+                            command.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
+                            command.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+
+                            order.OrderId = (int)command.ExecuteScalar();
+                        }
+
+                        foreach (var orderLine in order.OrderLines)
+                        {
+                            orderLine.OrderId = order.OrderId;
+                            string orderLineQuery = "INSERT INTO OrderLine (quantity, orderId_FK, productId_FK) VALUES (@Quantity, @OrderId, @ProductId)";
+
+                            using (SqlCommand command = new SqlCommand(orderLineQuery, connection, transaction))
+                            {
+                                command.Parameters.AddWithValue("@Quantity", orderLine.Quantity);
+                                command.Parameters.AddWithValue("@OrderId", orderLine.OrderId);
+                                command.Parameters.AddWithValue("@ProductId", orderLine.ProductId);
+
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
             }
         }
