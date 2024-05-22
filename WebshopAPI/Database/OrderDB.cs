@@ -1,7 +1,7 @@
-﻿using ModelAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using ModelAPI;
 
 namespace WebshopAPI.Database
 {
@@ -27,13 +27,14 @@ namespace WebshopAPI.Database
                 {
                     while (reader.Read())
                     {
-                        orders.Add(new Order(
-                            (int)reader["orderId"],
-                            (DateTime)reader["orderDate"],
-                            (DateTime)reader["deliveryDate"],
-                            (decimal)reader["totalPrice"],
-                            (int)reader["customerId_FK"]
-                        ));
+                        orders.Add(new Order
+                        {
+                            OrderId = (int)reader["orderId"],
+                            OrderDate = (DateTime)reader["orderDate"],
+                            DeliveryDate = (DateTime)reader["deliveryDate"],
+                            TotalPrice = (decimal)reader["totalPrice"],
+                            CustomerId = (int)reader["customerId_FK"]
+                        });
                     }
                 }
             }
@@ -55,13 +56,14 @@ namespace WebshopAPI.Database
                     {
                         if (reader.Read())
                         {
-                            return new Order(
-                                (int)reader["orderId"],
-                                (DateTime)reader["orderDate"],
-                                (DateTime)reader["deliveryDate"],
-                                (decimal)reader["totalPrice"],
-                                (int)reader["customerId_FK"]
-                            );
+                            return new Order
+                            {
+                                OrderId = (int)reader["orderId"],
+                                OrderDate = (DateTime)reader["orderDate"],
+                                DeliveryDate = (DateTime)reader["deliveryDate"],
+                                TotalPrice = (decimal)reader["totalPrice"],
+                                CustomerId = (int)reader["customerId_FK"]
+                            };
                         }
                     }
                 }
@@ -81,7 +83,7 @@ namespace WebshopAPI.Database
                     command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
                     command.Parameters.AddWithValue("@DeliveryDate", order.DeliveryDate);
                     command.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
-                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId_FK);
+                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId);
 
                     command.ExecuteNonQuery();
                 }
@@ -92,7 +94,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "UPDATE [Order] SET orderDate = @OrderDate, deliveryDate = @DeliveryDate, totalPrice = @TotalPrice WHERE orderId = @Id";
+                string query = "UPDATE [Order] SET orderDate = @OrderDate, deliveryDate = @DeliveryDate, totalPrice = @TotalPrice, customerId_FK = @CustomerId WHERE orderId = @Id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -100,6 +102,7 @@ namespace WebshopAPI.Database
                     command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
                     command.Parameters.AddWithValue("@DeliveryDate", order.DeliveryDate);
                     command.Parameters.AddWithValue("@TotalPrice", order.TotalPrice);
+                    command.Parameters.AddWithValue("@CustomerId", order.CustomerId);
 
                     command.ExecuteNonQuery();
                 }
