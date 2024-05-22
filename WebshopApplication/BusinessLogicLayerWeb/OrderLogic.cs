@@ -1,45 +1,51 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using WebshopApplication.ServiceLayer;
 using WebshopApplication.Models;
-using WebshopApplication.ServiceLayer.WebshopApplication.ServiceLayer;
+using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.BusinessLogicLayerWeb
 {
     public class OrderLogic : IOrderLogic
     {
         private readonly IOrderService _orderService;
+        private readonly ICustomerService _customerService;
 
         public OrderLogic(IConfiguration configuration)
         {
             _orderService = new OrderService(configuration);
+            _customerService = new CustomerService(configuration);
         }
 
-        public Task<List<Order>> GetOrders(string sortParam)
+        public async Task<List<Order>> GetOrders(string sortParam)
         {
-            return _orderService.GetOrders(sortParam);
+            return await _orderService.GetOrders(sortParam);
         }
 
-        public Task<Order> GetOrderById(int id)
+        public async Task<Order> GetOrderById(int id)
         {
-            return _orderService.GetOrders(null, id)
-                .ContinueWith(task => task.Result != null && task.Result.Count > 0 ? task.Result[0] : null);
+            var order = await _orderService.GetOrderById(id);
+            if (order != null)
+            {
+                var customer = await _customerService.GetCustomerById(order.CustomerId);
+                order.Cust = customer;
+            }
+            return order;
         }
 
-        public Task<bool> InsertOrder(Order order)
+        public async Task<bool> InsertOrder(Order order)
         {
-            return _orderService.SaveOrder(order);
+            return await _orderService.SaveOrder(order);
         }
 
-        public Task<bool> UpdateOrder(Order order)
+        public async Task<bool> UpdateOrder(Order order)
         {
-            return _orderService.UpdateOrder(order);
+            return await _orderService.UpdateOrder(order);
         }
 
-        public Task<bool> DeleteOrder(int id)
+        public async Task<bool> DeleteOrder(int id)
         {
-            return _orderService.DeleteOrder(id);
+            return await _orderService.DeleteOrder(id);
         }
     }
 }

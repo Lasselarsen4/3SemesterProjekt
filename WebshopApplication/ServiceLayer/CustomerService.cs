@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using WebshopApplication.Models;
 
-
 namespace WebshopApplication.ServiceLayer
 {
     public class CustomerService : ICustomerService
@@ -47,6 +46,20 @@ namespace WebshopApplication.ServiceLayer
             }
 
             return new List<Customer>();
+        }
+
+        public async Task<Customer> GetCustomerById(int id)
+        {
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/customer/{id}";
+
+            var response = await _serviceConnection.CallServiceGet();
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var customer = JsonConvert.DeserializeObject<Customer>(content);
+                return customer;
+            }
+            return null;
         }
 
         public async Task<bool> SaveCustomer(Customer customer)

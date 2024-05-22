@@ -36,7 +36,6 @@ namespace WebshopApplication.Controllers
             return View(order);
         }
 
-
         // GET: /Order/Create
         [HttpGet("Create")]
         public IActionResult Create()

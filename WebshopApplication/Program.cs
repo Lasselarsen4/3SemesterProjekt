@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using WebshopApplication.ServiceLayer;
-using WebshopApplication.ServiceLayer.WebshopApplication.ServiceLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 

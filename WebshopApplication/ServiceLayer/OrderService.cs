@@ -8,84 +8,104 @@ using WebshopApplication.Models;
 
 namespace WebshopApplication.ServiceLayer
 {
-    namespace WebshopApplication.ServiceLayer
+    public class OrderService : IOrderService
     {
-        public class OrderService : IOrderService
-        {
-            private readonly IServiceConnection _serviceConnection;
+        private readonly IServiceConnection _serviceConnection;
 
-            public OrderService(IConfiguration configuration)
+        public OrderService(IConfiguration configuration)
+        {
+            var baseUrl = configuration["ServiceUrlToUse"];
+            _serviceConnection = new ServiceConnection(baseUrl);
+        }
+
+        public async Task<List<Order>> GetOrders(string sortParam, int id = -1)
+        {
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order";
+            if (id > 0)
             {
-                var baseUrl = configuration["ServiceUrlToUse"];
-                _serviceConnection = new ServiceConnection(baseUrl);
+                _serviceConnection.UseUrl += $"/{id}";
+            }
+            else if (!string.IsNullOrEmpty(sortParam) && sortParam.ToLower() != "none")
+            {
+                _serviceConnection.UseUrl += $"?sortBy={sortParam}";
             }
 
-            public async Task<List<Order>> GetOrders(string sortParam, int id = -1)
+            var response = await _serviceConnection.CallServiceGet();
+            if (response != null && response.IsSuccessStatusCode)
             {
-                _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order";
+                var content = await response.Content.ReadAsStringAsync();
                 if (id > 0)
                 {
-                    _serviceConnection.UseUrl += $"/{id}";
+                    var singleOrder = JsonConvert.DeserializeObject<Order>(content);
+                    return new List<Order> { singleOrder };
                 }
-                else if (!string.IsNullOrEmpty(sortParam) && sortParam.ToLower() != "none")
+                else
                 {
-                    _serviceConnection.UseUrl += $"?sortBy={sortParam}";
+                    return JsonConvert.DeserializeObject<List<Order>>(content);
                 }
+            }
 
-                var response = await _serviceConnection.CallServiceGet();
-                if (response != null && response.IsSuccessStatusCode)
+            return new List<Order>();
+        }
+
+        public async Task<Order> GetOrderById(int id)
+        {
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order/{id}";
+
+            var response = await _serviceConnection.CallServiceGet();
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var order = JsonConvert.DeserializeObject<Order>(content);
+                return order;
+            }
+            return null;
+        }
+
+        public async Task<bool> SaveOrder(Order order)
+        {
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order";
+
+            var orderForInsert = new
+            {
+                order.OrderDate,
+                order.DeliveryDate,
+                order.TotalPrice,
+                order.CustomerId,
+                Cust = new
                 {
-                    var content = await response.Content.ReadAsStringAsync();
-                    if (id > 0)
-                    {
-                        var singleOrder = JsonConvert.DeserializeObject<Order>(content);
-                        return new List<Order> { singleOrder };
-                    }
-                    else
-                    {
-                        return JsonConvert.DeserializeObject<List<Order>>(content);
-                    }
-                }
+                    order.Cust.FirstName,
+                    order.Cust.LastName,
+                    order.Cust.Email,
+                    order.Cust.Phone,
+                    order.Cust.StreetName,
+                    order.Cust.HouseNumber,
+                    order.Cust.ZipCode
+                },
+                order.OrderLines // Ensure order lines are included
+            };
 
-                return new List<Order>();
-            }
+            var json = JsonConvert.SerializeObject(orderForInsert);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _serviceConnection.CallServicePost(content);
+            return response != null && response.IsSuccessStatusCode;
+        }
 
-            public async Task<bool> SaveOrder(Order order)
-            {
-                _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order";
+        public async Task<bool> UpdateOrder(Order order)
+        {
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order/{order.OrderId}";
 
-                var orderForInsert = new
-                {
-                    order.OrderDate,
-                    order.DeliveryDate,
-                    order.TotalPrice,
-                    order.CustomerId,
-                    order.Cust, // Include the customer object
-                    order.OrderLines // Ensure order lines are included
-                };
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _serviceConnection.CallServicePut(content);
+            return response != null && response.IsSuccessStatusCode;
+        }
 
-                var json = JsonConvert.SerializeObject(orderForInsert);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _serviceConnection.CallServicePost(content);
-                return response != null && response.IsSuccessStatusCode;
-            }
-
-            public async Task<bool> UpdateOrder(Order order)
-            {
-                _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order/{order.OrderId}";
-
-                var json = JsonConvert.SerializeObject(order);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _serviceConnection.CallServicePut(content);
-                return response != null && response.IsSuccessStatusCode;
-            }
-
-            public async Task<bool> DeleteOrder(int id)
-            {
-                _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order/{id}";
-                var response = await _serviceConnection.CallServiceDelete();
-                return response != null && response.IsSuccessStatusCode;
-            }
+        public async Task<bool> DeleteOrder(int id)
+        {
+            _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order/{id}";
+            var response = await _serviceConnection.CallServiceDelete();
+            return response != null && response.IsSuccessStatusCode;
         }
     }
 }
