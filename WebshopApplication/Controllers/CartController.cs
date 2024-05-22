@@ -27,10 +27,13 @@ namespace WebshopApplication.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var cartItems = _cartService.GetCartItems();
-            var totalPrice = _cartService.GetTotalPrice();
-            ViewBag.TotalPrice = totalPrice;
-            return View(cartItems);
+            var cartItems = _cartService.GetCartItems().ToList();
+            var viewModel = new CheckoutViewModel
+            {
+                CartItems = cartItems
+            };
+            ViewBag.TotalPrice = _cartService.GetTotalPrice();
+            return View(viewModel);
         }
 
         [HttpGet("Checkout")]

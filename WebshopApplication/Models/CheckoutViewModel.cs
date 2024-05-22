@@ -1,4 +1,6 @@
-﻿namespace WebshopApplication.Models
+﻿using System.Collections;
+
+namespace WebshopApplication.Models
 {
     public class CheckoutViewModel
     {
@@ -11,5 +13,9 @@
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
+        public Customer Customer { get; set; }
+        public int CartItemCount => CartItems.Count;
+        public bool IsCartEmpty => CartItemCount == 0;
+        public List<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
 }

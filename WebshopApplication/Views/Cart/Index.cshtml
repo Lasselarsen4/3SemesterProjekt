@@ -1,39 +1,57 @@
-@model IEnumerable<WebshopApplication.Models.CartItem>
+@model WebshopApplication.Models.CheckoutViewModel
 @{
     ViewBag.Title = "Cart";
 }
 
-<h2>Cart</h2>
+<h2>Your Cart</h2>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.ProductName</td>
-            <td>@item.Quantity</td>
-            <td>@item.ProductPrice</td>
-            <td>@(item.ProductPrice * item.Quantity)</td>
-            <td>
-                <form method="post" asp-action="Remove">
-                    <input type="hidden" name="productId" value="@item.ProductId" />
-                    <button type="submit" class="btn btn-danger">Remove</button>
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+@if (Model.CartItems.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>
+                        <form asp-action="Update" method="post" style="display:inline">
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control" style="width: 60px; display: inline;" />
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </td>
+                    <td>@item.ProductPrice.ToString("C")</td>
+                    <td>@(item.ProductPrice * item.Quantity) kr.</td>
+                    <td>
+                        <form asp-action="Remove" method="post" style="display:inline">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<h3>Total: @ViewBag.TotalPrice</h3>
+    <div class="total-price">
+        <h4>Total Price: @ViewBag.TotalPrice.ToString("C")</h4>
+    </div>
 
-<a href="@Url.Action("Checkout")" class="btn btn-primary">Checkout</a>
+    <!-- Checkout Button -->
+    <a asp-action="Checkout" class="btn btn-primary @(Model.IsCartEmpty ? "disabled" : "")">
+        Checkout
+    </a>
+}
+else
+{
+    <p class="text-danger">Your cart is empty. Add items to the cart to proceed.</p>
+}
