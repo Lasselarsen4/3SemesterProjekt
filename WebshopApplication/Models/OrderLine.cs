@@ -1,8 +1,10 @@
-namespace WebshopApplication.Models;
-
-public class OrderLine
+namespace WebshopApplication.Models
 {
-    public int Quantity { get; set; }
-    public int OrderId { get; set; }
-    public int ProductId { get; set; }
+    public class OrderLine
+    {
+        public int OrderLineId { get; set; }
+        public int OrderId { get; set; }  // Ensure this is correctly mapped
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+    }
 }

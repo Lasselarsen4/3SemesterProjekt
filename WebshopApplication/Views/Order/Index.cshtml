@@ -1,53 +1,29 @@
 @model IEnumerable<WebshopApplication.Models.Order>
 
 @{
-    ViewData["Title"] = "Order Index";
+    ViewBag.Title = "Orders";
 }
 
-<h1>Order Index</h1>
+<h2>Orders</h2>
 
 <table class="table">
     <thead>
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.First().OrderId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().OrderDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().DeliveryDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().TotalPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().CustomerId_FK)
-        </th>
+        <th>Order ID</th>
+        <th>Order Date</th>
+        <th>Total Price</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) {
+    @foreach (var order in Model)
+    {
         <tr>
+            <td>@order.OrderId</td>
+            <td>@order.OrderDate</td>
+            <td>@order.TotalPrice</td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeliveryDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerId_FK)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+                <a href="@Url.Action("Details", "Order", new { id = order.OrderId })" class="btn btn-info">View Details</a>
             </td>
         </tr>
     }

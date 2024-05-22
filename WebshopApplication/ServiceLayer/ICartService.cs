@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using WebshopApplication.Models;
-using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
 {
@@ -11,6 +10,6 @@ namespace WebshopApplication.ServiceLayer
         void UpdateCartItem(int productId, int quantity);
         void RemoveFromCart(int productId);
         decimal GetTotalPrice();
-        void ClearCart(); // Add this method
+        void ClearCart();
     }
 }

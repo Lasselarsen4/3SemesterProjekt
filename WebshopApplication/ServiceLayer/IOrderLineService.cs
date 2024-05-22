@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ModelAPI;
+using WebshopApplication.Models;
 
 namespace WebshopApplication.ServiceLayer
 {

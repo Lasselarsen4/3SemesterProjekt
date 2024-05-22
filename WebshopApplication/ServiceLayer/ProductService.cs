@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using ModelAPI;
+using WebshopApplication.Models;
 
 namespace WebshopApplication.ServiceLayer
 {
@@ -27,7 +27,8 @@ namespace WebshopApplication.ServiceLayer
                 var content = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Product>(content);
             }
-            return null;
+
+            return null; // Adjust this to handle null properly in your code
         }
 
         public async Task<List<Product>> GetProducts(string sortParam, int id = -1)

@@ -1,24 +1,65 @@
 @model WebshopApplication.Models.Order
 
 @{
-    ViewData["Title"] = "Order Details";
+    ViewBag.Title = "Order Details";
 }
 
-<h1>Order Details</h1>
+<h2>Order Details</h2>
 
-<div>
-    <strong>ID:</strong> @Model.OrderId
-</div>
-<div>
-    <strong>Order Date:</strong> @Model.OrderDate.ToShortDateString()
-</div>
-<div>
-    <strong>Delivery Date:</strong> @Model.DeliveryDate.ToShortDateString()
-</div>
-<div>
-    <strong>Total Price:</strong> @Model.TotalPrice
-</div>
-<div>
-    <strong>Customer ID:</strong> @Model.CustomerId_FK
-</div>
-<a href="/Order">Back to List</a>
+@if (Model != null)
+{
+    <div>
+        <h3>Order Information</h3>
+        <p>Order ID: @Model.OrderId</p>
+        <p>Order Date: @Model.OrderDate.ToString("MM/dd/yyyy")</p>
+        <p>Delivery Date: @Model.DeliveryDate.ToString("MM/dd/yyyy")</p>
+        <p>Total Price: @Model.TotalPrice</p>
+    </div>
+
+    <div>
+        <h3>Customer Information</h3>
+        @if (Model.Cust != null)
+        {
+            <p>Name: @Model.Cust.FirstName @Model.Cust.LastName</p>
+            <p>Email: @Model.Cust.Email</p>
+            <p>Phone: @Model.Cust.Phone</p>
+            <p>Address: @Model.Cust.StreetName @Model.Cust.HouseNumber, @Model.Cust.ZipCode</p>
+        }
+        else
+        {
+            <p>No customer information available.</p>
+        }
+    </div>
+
+    <div>
+        <h3>Order Lines</h3>
+        @if (Model.OrderLines != null && Model.OrderLines.Any())
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var line in Model.OrderLines)
+                {
+                    <tr>
+                        <td>@line.ProductId</td>
+                        <td>@line.Quantity</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No order lines available.</p>
+        }
+    </div>
+}
+else
+{
+    <p>Order details not available.</p>
+}

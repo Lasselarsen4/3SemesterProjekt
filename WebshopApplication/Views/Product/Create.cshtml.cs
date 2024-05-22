@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ModelAPI;
+using WebshopApplication.Models;
 using System;
 using WebshopApplication.BusinessLogicLayerWeb;
 
@@ -16,7 +16,7 @@ namespace WebshopApplication.Views.Product
         }
 
         [BindProperty]
-        public ModelAPI.Product Product { get; set; }
+        public WebshopApplication.Models.Product Product { get; set; }
 
         public IActionResult OnGet()
         {

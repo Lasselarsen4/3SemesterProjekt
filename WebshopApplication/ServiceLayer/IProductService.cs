@@ -1,4 +1,4 @@
-using ModelAPI;
+using WebshopApplication.Models;
 using System.Threading.Tasks;
 
 namespace WebshopApplication.ServiceLayer

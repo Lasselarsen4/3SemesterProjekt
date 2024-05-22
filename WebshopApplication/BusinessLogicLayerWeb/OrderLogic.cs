@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using WebshopApplication.ServiceLayer;
 using WebshopApplication.Models;
+using WebshopApplication.ServiceLayer.WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.BusinessLogicLayerWeb
 {

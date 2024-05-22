@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using WebshopApplication.Models;
-using ModelAPI;
 
 namespace WebshopApplication.ServiceLayer
 {

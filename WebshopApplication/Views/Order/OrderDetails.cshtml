@@ -1,0 +1,42 @@
+@model WebshopApplication.Models.Order
+
+@{
+    ViewBag.Title = "Order Details";
+}
+
+<h2>Order Details</h2>
+
+<h3>Customer Information</h3>
+<p>
+    <strong>Name:</strong> @Model.Cust.FirstName @Model.Cust.LastName<br />
+    <strong>Email:</strong> @Model.Cust.Email<br />
+    <strong>Phone:</strong> @Model.Cust.Phone<br />
+    <strong>Address:</strong> @Model.Cust.StreetName @Model.Cust.HouseNumber, @Model.Cust.ZipCode
+</p>
+
+<h3>Order Information</h3>
+<p>
+    <strong>Order ID:</strong> @Model.OrderId<br />
+    <strong>Order Date:</strong> @Model.OrderDate<br />
+    <strong>Delivery Date:</strong> @Model.DeliveryDate<br />
+    <strong>Total Price:</strong> @Model.TotalPrice
+</p>
+
+<h3>Order Lines</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Product ID</th>
+        <th>Quantity</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var line in Model.OrderLines)
+    {
+        <tr>
+            <td>@line.ProductId</td>
+            <td>@line.Quantity</td>
+        </tr>
+    }
+    </tbody>
+</table>

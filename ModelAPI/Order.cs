@@ -24,5 +24,6 @@ namespace ModelAPI
         public decimal TotalPrice { get; set; }
         public int CustomerId_FK { get; set; }
         public List<OrderLine> OrderLines { get; set; }
+        public Customer Cust { get; set; }
     }
 }
