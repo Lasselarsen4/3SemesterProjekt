@@ -8,7 +8,7 @@ namespace WebshopApplication.ServiceLayer
     {
         Task<bool> SaveOrder(Order order);
         Task<Order> GetOrderById(int id);
-        Task<List<Order>> GetOrders(string sortParam);
+        Task<List<Order>> GetOrders(string sortParam = null, int id = -1);
         Task<bool> UpdateOrder(Order order);
         Task<bool> DeleteOrder(int id);
     }

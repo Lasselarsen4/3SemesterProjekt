@@ -49,7 +49,6 @@ namespace WebshopApplication.ServiceLayer
             var response = await _serviceConnection.CallServicePost(content);
             return response != null && response.IsSuccessStatusCode;
         }
-        
 
         public async Task<Order> GetOrderById(int id)
         {
@@ -65,10 +64,14 @@ namespace WebshopApplication.ServiceLayer
             return null;
         }
 
-        public async Task<List<Order>> GetOrders(string sortParam)
+        public async Task<List<Order>> GetOrders(string sortParam = null, int id = -1)
         {
             _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/order";
-            if (!string.IsNullOrEmpty(sortParam) && sortParam.ToLower() != "none")
+            if (id > 0)
+            {
+                _serviceConnection.UseUrl += $"/{id}";
+            }
+            else if (!string.IsNullOrEmpty(sortParam) && sortParam.ToLower() != "none")
             {
                 _serviceConnection.UseUrl += $"?sortBy={sortParam}";
             }

@@ -27,14 +27,21 @@ namespace WebshopAPI.Database
                 {
                     while (reader.Read())
                     {
-                        orders.Add(new Order(
+                        var order = new Order(
                             (int)reader["orderId"],
                             (DateTime)reader["orderDate"],
                             (DateTime)reader["deliveryDate"],
                             (decimal)reader["totalPrice"],
                             (int)reader["customerId_FK"]
-                        ));
+                        );
+                        orders.Add(order);
                     }
+                }
+
+                // Retrieve order lines for all orders
+                foreach (var order in orders)
+                {
+                    order.OrderLines = GetOrderLinesByOrderId(order.OrderId, connection);
                 }
             }
 
@@ -43,6 +50,8 @@ namespace WebshopAPI.Database
 
         public Order GetById(int id)
         {
+            Order order = null;
+
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
                 string query = "SELECT * FROM [Order] WHERE orderId = @Id";
@@ -55,7 +64,7 @@ namespace WebshopAPI.Database
                     {
                         if (reader.Read())
                         {
-                            return new Order(
+                            order = new Order(
                                 (int)reader["orderId"],
                                 (DateTime)reader["orderDate"],
                                 (DateTime)reader["deliveryDate"],
@@ -65,9 +74,42 @@ namespace WebshopAPI.Database
                         }
                     }
                 }
+
+                if (order != null)
+                {
+                    order.OrderLines = GetOrderLinesByOrderId(order.OrderId, connection);
+                }
             }
 
-            return null;
+            return order;
+        }
+
+        private List<OrderLine> GetOrderLinesByOrderId(int orderId, SqlConnection connection)
+        {
+            List<OrderLine> orderLines = new List<OrderLine>();
+
+            string query = "SELECT * FROM OrderLine WHERE orderId_FK = @OrderId";
+
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@OrderId", orderId);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var orderLine = new OrderLine
+                        {
+                            OrderId = (int)reader["orderId_FK"],
+                            ProductId = (int)reader["productId_FK"],
+                            Quantity = (int)reader["quantity"]
+                        };
+                        orderLines.Add(orderLine);
+                    }
+                }
+            }
+
+            return orderLines;
         }
 
         public void Add(Order order)
