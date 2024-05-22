@@ -6,5 +6,6 @@ namespace WebshopApplication.Models
         public int OrderId { get; set; }  // Ensure this is correctly mapped
         public int ProductId { get; set; }
         public int Quantity { get; set; }
+        public Product Product { get; set; }
     }
 }

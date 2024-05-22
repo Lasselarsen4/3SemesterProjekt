@@ -88,7 +88,12 @@ namespace WebshopAPI.Database
         {
             List<OrderLine> orderLines = new List<OrderLine>();
 
-            string query = "SELECT * FROM OrderLine WHERE orderId_FK = @OrderId";
+            string query = @"
+                SELECT ol.orderId_FK, ol.productId_FK, ol.quantity, 
+                       p.productId, p.productName, p.productPrice, p.productDescription
+                FROM OrderLine ol
+                JOIN Product p ON ol.productId_FK = p.productId
+                WHERE ol.orderId_FK = @OrderId";
 
             using (SqlCommand command = new SqlCommand(query, connection))
             {
@@ -102,7 +107,14 @@ namespace WebshopAPI.Database
                         {
                             OrderId = (int)reader["orderId_FK"],
                             ProductId = (int)reader["productId_FK"],
-                            Quantity = (int)reader["quantity"]
+                            Quantity = (int)reader["quantity"],
+                            Product = new Product
+                            {
+                                ProductId = (int)reader["productId"],
+                                ProductName = (string)reader["productName"],
+                                ProductPrice = (decimal)reader["productPrice"],
+                                ProductDescription = (string)reader["productDescription"]
+                            }
                         };
                         orderLines.Add(orderLine);
                     }
