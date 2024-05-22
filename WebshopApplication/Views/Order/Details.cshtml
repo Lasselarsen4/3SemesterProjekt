@@ -38,20 +38,16 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Product Name</th>
+                    <th>Product ID</th>
                     <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Description</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach (var line in Model.OrderLines)
                 {
                     <tr>
-                        <td>@line.Product.ProductName</td>
+                        <td>@line.ProductId</td>
                         <td>@line.Quantity</td>
-                        <td>@line.Product.ProductPrice</td>
-                        <td>@line.Product.ProductDescription</td>
                     </tr>
                 }
                 </tbody>
