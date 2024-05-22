@@ -1,66 +1,95 @@
 @model WebshopApplication.Models.Order
 
 @{
-    ViewBag.Title = "Order Details";
+ViewBag.Title = "Order Details";
 }
 
-<h2>Order Details</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-@if (Model != null)
-{
-    <div>
-        <h3>Order Information</h3>
-        <p>Order ID: @Model.OrderId</p>
-        <p>Order Date: @Model.OrderDate.ToString("MM/dd/yyyy")</p>
-        <p>Delivery Date: @Model.DeliveryDate.ToString("MM/dd/yyyy")</p>
-        <p>Total Price: @Model.TotalPrice</p>
+        h2 {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        h3 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-family: 'Arial', sans-serif;
+            color: #555;
+        }
+
+        p {
+            font-family: 'Arial', sans-serif;
+            color: #555;
+        }
+
+        .table thead th {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Order Details</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3>Customer Information</h3>
+            <p>
+                <strong>Name:</strong> @Model.Cust.FirstName @Model.Cust.LastName<br />
+                <strong>Email:</strong> @Model.Cust.Email<br />
+                <strong>Phone:</strong> @Model.Cust.Phone<br />
+                <strong>Address:</strong> @Model.Cust.StreetName @Model.Cust.HouseNumber, @Model.Cust.ZipCode
+            </p>
+        </div>
+        <div class="col-md-6">
+            <h3>Order Information</h3>
+            <p>
+                <strong>Order ID:</strong> @Model.OrderId<br />
+                <strong>Order Date:</strong> @Model.OrderDate.ToShortDateString()<br />
+                <strong>Delivery Date:</strong> @Model.DeliveryDate.ToShortDateString()<br />
+                <strong>Total Price:</strong> @Model.TotalPrice.ToString("C")
+            </p>
+        </div>
     </div>
 
-    <div>
-        <h3>Customer Information</h3>
-        @if (Model.Cust != null)
+    <h3>Order Lines</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var line in Model.OrderLines)
         {
-            <p>Name: @Model.Cust.FirstName @Model.Cust.LastName</p>
-            <p>Email: @Model.Cust.Email</p>
-            <p>Phone: @Model.Cust.Phone</p>
-            <p>Address: @Model.Cust.StreetName @Model.Cust.HouseNumber, @Model.Cust.ZipCode</p>
+        <tr>
+            <td>@line.ProductId</td>
+            <td>@line.Quantity</td>
+        </tr>
         }
-        else
-        {
-            <p>No customer information available.</p>
-        }
-    </div>
+        </tbody>
+    </table>
+</div>
 
-    <div>
-        <h3>Order Lines</h3>
-        @if (Model.OrderLines != null && Model.OrderLines.Any())
-        {
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Product ID</th>
-                    <th>Quantity</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var line in Model.OrderLines)
-                {
-                    <tr>
-                        <td>@line.ProductId</td>
-                        <td>@line.Quantity</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>No order lines available.</p>
-            <p>Debug: OrderLines Count: @Model.OrderLines?.Count</p>
-        }
-    </div>
-}
-else
-{
-    <p>Order details not available.</p>
-}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
