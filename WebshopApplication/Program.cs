@@ -9,6 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllers(); // This adds controller support
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration); // Ensure IConfiguration is available for dependency injection
 
 // Register your services here

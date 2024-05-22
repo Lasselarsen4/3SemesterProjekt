@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using WebshopApplication.Models;
 using ModelAPI;
@@ -7,67 +9,69 @@ namespace WebshopApplication.ServiceLayer
 {
     public class CartService : ICartService
     {
-        private readonly Cart _cart;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private const string CartCookieName = "CartCookie";
 
-        public CartService()
+        public CartService(IHttpContextAccessor httpContextAccessor)
         {
-            _cart = new Cart();
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        private Cart GetCartFromCookies()
+        {
+            var cookie = _httpContextAccessor.HttpContext.Request.Cookies[CartCookieName];
+            return string.IsNullOrEmpty(cookie) ? new Cart() : JsonConvert.DeserializeObject<Cart>(cookie);
+        }
+
+        private void SaveCartToCookies(Cart cart)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                Expires = System.DateTime.Now.AddDays(7),
+                HttpOnly = true,
+                Secure = true,
+            };
+            var cartJson = JsonConvert.SerializeObject(cart);
+            _httpContextAccessor.HttpContext.Response.Cookies.Append(CartCookieName, cartJson, cookieOptions);
         }
 
         public IEnumerable<CartItem> GetCartItems()
         {
-            return _cart.Items;
+            var cart = GetCartFromCookies();
+            return cart.Items;
         }
 
         public void AddToCart(Product product, int quantity)
         {
-            var existingItem = _cart.Items.FirstOrDefault(i => i.ProductId == product.ProductId);
-            if (existingItem == null)
-            {
-                _cart.Items.Add(new CartItem
-                {
-                    ProductId = product.ProductId,
-                    ProductName = product.ProductName,
-                    ProductPrice = product.ProductPrice,
-                    Quantity = quantity
-                });
-            }
-            else
-            {
-                existingItem.Quantity += quantity;
-            }
+            var cart = GetCartFromCookies();
+            cart.AddItem(product, quantity);
+            SaveCartToCookies(cart);
         }
 
         public void UpdateCartItem(int productId, int quantity)
         {
-            var item = _cart.Items.FirstOrDefault(i => i.ProductId == productId);
-            if (item != null)
-            {
-                item.Quantity = quantity;
-                if (item.Quantity <= 0)
-                {
-                    _cart.Items.Remove(item);
-                }
-            }
+            var cart = GetCartFromCookies();
+            cart.UpdateItem(productId, quantity);
+            SaveCartToCookies(cart);
         }
 
         public void RemoveFromCart(int productId)
         {
-            var item = _cart.Items.FirstOrDefault(i => i.ProductId == productId);
-            if (item != null)
-            {
-                _cart.Items.Remove(item);
-            }
+            var cart = GetCartFromCookies();
+            cart.RemoveItem(productId);
+            SaveCartToCookies(cart);
         }
 
         public decimal GetTotalPrice()
         {
-            return _cart.Items.Sum(i => i.ProductPrice * i.Quantity);
+            var cart = GetCartFromCookies();
+            return cart.GetTotalPrice();
         }
 
         public void ClearCart()
         {
-            _cart.Items.Clear();
+            var cart = new Cart();
+            SaveCartToCookies(cart);
         }
     }
 }

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using ModelAPI;
 using WebshopApplication.BusinessLogicLayerWeb;
 using Microsoft.Extensions.Configuration;
+using WebshopApplication.Models;
 
 namespace WebshopApplication.Controllers
 {
