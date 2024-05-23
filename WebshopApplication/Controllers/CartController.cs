@@ -119,6 +119,14 @@ namespace WebshopApplication.Controllers
                 return NotFound("Product not found");
             }
 
+            var existingCartItem = _cartService.GetCartItems().FirstOrDefault(item => item.ProductId == productId);
+            var totalQuantity = existingCartItem != null ? existingCartItem.Quantity + quantity : quantity;
+
+            if (totalQuantity > product.Stock)
+            {
+                return BadRequest($"Cannot add {quantity} items to the cart. Only {product.Stock} items available in stock.");
+            }
+
             _cartService.AddToCart(product, quantity);
             return RedirectToAction(nameof(Index));
         }
