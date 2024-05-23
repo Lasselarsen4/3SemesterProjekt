@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using WebshopApplication.Models;
 using WebshopApplication.ServiceLayer;
 
@@ -76,6 +75,19 @@ namespace WebshopApplication.Controllers
                                     Quantity = item.Quantity
                                 }).ToList()
                             };
+
+                            // Validate and update stock for each product in the order
+                            foreach (var orderLine in order.OrderLines)
+                            {
+                                var product = await _productService.GetById(orderLine.ProductId);
+                                if (product == null || product.Stock < orderLine.Quantity)
+                                {
+                                    return BadRequest($"Insufficient stock for product ID {orderLine.ProductId}");
+                                }
+
+                                product.Stock -= orderLine.Quantity;
+                                await _productService.UpdateProduct(product);
+                            }
 
                             // Attempt to save the order
                             var orderSaved = await _orderService.SaveOrder(order);

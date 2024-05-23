@@ -28,7 +28,7 @@ namespace WebshopApplication.ServiceLayer
                 return JsonConvert.DeserializeObject<Product>(content);
             }
 
-            return null; // Adjust this to handle null properly in your code
+            return null;
         }
 
         public async Task<List<Product>> GetProducts(string sortParam, int id = -1)

@@ -10,5 +10,6 @@ namespace WebshopAPI.Database
         void Add(Product product);
         void Update(Product product);
         void Delete(int id);
+        void UpdateProductStock(int productId, int quantity); // Added method signature
     }
 }

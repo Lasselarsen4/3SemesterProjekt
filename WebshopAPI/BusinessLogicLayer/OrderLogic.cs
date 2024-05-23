@@ -34,9 +34,10 @@ namespace WebshopAPI.BusinessLogicLayer
             foreach (var orderLine in order.OrderLines)
             {
                 _orderLineDB.Add(orderLine);
+                
+                // Update product stock
+                _productDB.UpdateProductStock(orderLine.ProductId, orderLine.Quantity);
             }
-
-            UpdateProductStock(order);
         }
 
         public void UpdateOrder(Order updatedOrder)
