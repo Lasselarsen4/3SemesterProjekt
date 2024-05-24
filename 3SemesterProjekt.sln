@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelAPI", "ModelAPI\ModelA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebshopApplication", "WebshopApplication\WebshopApplication.csproj", "{F881AD5B-F92B-4756-ABB6-076F85229FA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopApp", "DesktopApp\DesktopApp.csproj", "{0F6AAF6B-162A-4B0A-9C92-D0CE744C1A2B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +24,5 @@ Global
 		{F881AD5B-F92B-4756-ABB6-076F85229FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F881AD5B-F92B-4756-ABB6-076F85229FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F881AD5B-F92B-4756-ABB6-076F85229FA9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F6AAF6B-162A-4B0A-9C92-D0CE744C1A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F6AAF6B-162A-4B0A-9C92-D0CE744C1A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F6AAF6B-162A-4B0A-9C92-D0CE744C1A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F6AAF6B-162A-4B0A-9C92-D0CE744C1A2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
