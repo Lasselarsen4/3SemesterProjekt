@@ -7,11 +7,9 @@
         public decimal ProductPrice { get; set; }
         public string ProductDescription { get; set; }
         public int Stock { get; set; }
+        public byte[] RowVersion { get; set; } // Add this property
 
-        
-        public Product()
-        {
-        }
+        public Product() { }
 
         public Product(int productId, string name, decimal price, string description, int stock)
         {
