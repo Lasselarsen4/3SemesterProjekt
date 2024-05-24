@@ -89,8 +89,7 @@ namespace WebshopApplication.ServiceLayer
                 product.ProductName,
                 product.ProductPrice,
                 product.ProductDescription,
-                product.Stock,
-                product.RowVersion // Include RowVersion
+                product.Stock
             };
 
             var json = JsonConvert.SerializeObject(productForUpdate);

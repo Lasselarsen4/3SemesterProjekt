@@ -7,5 +7,4 @@ public class Product
     public decimal ProductPrice { get; set; }
     public string ProductDescription { get; set; }
     public int Stock { get; set; }
-    public byte[] RowVersion { get; set; } // Add this property
 }
