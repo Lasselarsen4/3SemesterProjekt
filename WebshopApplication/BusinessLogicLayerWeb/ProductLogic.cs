@@ -1,7 +1,7 @@
+using WebshopApplication.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using WebshopApplication.Models;
 using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.BusinessLogicLayerWeb
@@ -39,6 +39,19 @@ namespace WebshopApplication.BusinessLogicLayerWeb
         public Task<bool> DeleteProduct(int id)
         {
             return _productService.DeleteProduct(id);
+        }
+
+        public async Task<bool> UpdateProductStock(int productId, int quantity, byte[] rowVersion)
+        {
+            var product = await GetProductById(productId);
+            if (product == null)
+            {
+                return false;
+            }
+
+            product.Stock -= quantity;
+            product.RowVersion = rowVersion; // Set the RowVersion for concurrency check
+            return await UpdateProduct(product);
         }
     }
 }

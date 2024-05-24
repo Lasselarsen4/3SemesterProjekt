@@ -1,8 +1,8 @@
-// ProductDB.cs
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using ModelAPI;
+using System.Data;
 
 namespace WebshopAPI.Database
 {
@@ -34,7 +34,10 @@ namespace WebshopAPI.Database
                             (decimal)reader["ProductPrice"],
                             reader["ProductDescription"].ToString(),
                             reader["Stock"] != DBNull.Value ? (int)reader["Stock"] : 0
-                        ));
+                        )
+                        {
+                            RowVersion = (byte[])reader["RowVersion"] // Retrieve the RowVersion
+                        });
                     }
                 }
             }
@@ -62,7 +65,10 @@ namespace WebshopAPI.Database
                                 (decimal)reader["ProductPrice"],
                                 reader["ProductDescription"].ToString(),
                                 reader["Stock"] != DBNull.Value ? (int)reader["Stock"] : 0
-                            );
+                            )
+                            {
+                                RowVersion = (byte[])reader["RowVersion"] // Retrieve the RowVersion
+                            };
                         }
                     }
                 }
@@ -93,7 +99,7 @@ namespace WebshopAPI.Database
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "UPDATE Product SET ProductName = @Name, ProductPrice = @Price, ProductDescription = @Description, Stock = @Stock WHERE ProductId = @Id";
+                string query = "UPDATE Product SET ProductName = @Name, ProductPrice = @Price, ProductDescription = @Description, Stock = @Stock WHERE ProductId = @Id AND RowVersion = @RowVersion";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -102,8 +108,13 @@ namespace WebshopAPI.Database
                     command.Parameters.AddWithValue("@Price", product.ProductPrice);
                     command.Parameters.AddWithValue("@Description", product.ProductDescription);
                     command.Parameters.AddWithValue("@Stock", product.Stock);
+                    command.Parameters.AddWithValue("@RowVersion", product.RowVersion);
 
-                    command.ExecuteNonQuery();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected == 0)
+                    {
+                        throw new DBConcurrencyException("The product was updated by another transaction.");
+                    }
                 }
             }
         }
@@ -123,21 +134,28 @@ namespace WebshopAPI.Database
             }
         }
         
-        public void UpdateProductStock(int productId, int quantity)
+        public void UpdateProductStock(int productId, int quantity, byte[] rowVersion)
         {
             using (SqlConnection connection = _dbConnection.OpenConnection())
             {
-                string query = "UPDATE Product SET Stock = Stock - @Quantity WHERE ProductId = @ProductId";
+                string query = @"
+                    UPDATE Product 
+                    SET Stock = Stock - @Quantity
+                    WHERE ProductId = @ProductId AND RowVersion = @RowVersion";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@ProductId", productId);
                     command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@RowVersion", rowVersion);
 
-                    command.ExecuteNonQuery();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected == 0)
+                    {
+                        throw new DBConcurrencyException("The product stock was updated by another transaction.");
+                    }
                 }
             }
         }
-
     }
 }
