@@ -136,23 +136,55 @@ namespace WebshopAPI.Database
         
         public void UpdateProductStock(int productId, int quantity, byte[] rowVersion)
         {
-            using (SqlConnection connection = _dbConnection.OpenConnection())
+            int retryCount = 3;
+            while (retryCount > 0)
             {
-                string query = @"
-                    UPDATE Product 
-                    SET Stock = Stock - @Quantity
-                    WHERE ProductId = @ProductId AND RowVersion = @RowVersion";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlConnection connection = _dbConnection.OpenConnection())
                 {
-                    command.Parameters.AddWithValue("@ProductId", productId);
-                    command.Parameters.AddWithValue("@Quantity", quantity);
-                    command.Parameters.AddWithValue("@RowVersion", rowVersion);
+                    string query = @"
+                        UPDATE Product 
+                        SET Stock = Stock - @Quantity
+                        WHERE ProductId = @ProductId AND RowVersion = @RowVersion";
 
-                    int rowsAffected = command.ExecuteNonQuery();
-                    if (rowsAffected == 0)
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        throw new DBConcurrencyException("The product stock was updated by another transaction.");
+                        command.Parameters.AddWithValue("@ProductId", productId);
+                        command.Parameters.AddWithValue("@Quantity", quantity);
+                        command.Parameters.AddWithValue("@RowVersion", rowVersion);
+
+                        try
+                        {
+                            int rowsAffected = command.ExecuteNonQuery();
+                            if (rowsAffected == 0)
+                            {
+                                throw new DBConcurrencyException("The product stock was updated by another transaction.");
+                            }
+                            return; // Exit if successful
+                        }
+                        catch (DBConcurrencyException ex)
+                        {
+                            // Log the exception
+                            Console.WriteLine($"Concurrency conflict detected: {ex.Message}");
+                            
+                            // Decrement retry count and get the latest row version
+                            retryCount--;
+                            if (retryCount == 0)
+                            {
+                                throw new ApplicationException("A concurrency conflict occurred after multiple retries. Please try again.");
+                            }
+                            else
+                            {
+                                // Fetch the latest row version
+                                var product = GetById(productId);
+                                rowVersion = product.RowVersion;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Handle other exceptions
+                            Console.WriteLine($"An error occurred: {ex.Message}");
+                            throw new ApplicationException("An unexpected error occurred. Please try again later.");
+                        }
                     }
                 }
             }
