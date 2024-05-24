@@ -1,35 +1,38 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-
-namespace DesktopApplication.ServiceLayer;
-
-public class ServiceConnection : IServiceConnection
+namespace DesktopApplication.ServiceLayer
 {
-    private readonly HttpClient _httpClient;
-
-    public ServiceConnection()
+    public class ServiceConnection : IServiceConnection
     {
-        _httpClient = new HttpClient();
-    }
+        private readonly HttpClient _httpClient;
+        private readonly string _baseUrl;
 
-    public async Task<HttpResponseMessage> CallServiceGet(string url)
-    {
-        return await _httpClient.GetAsync(url);
-    }
+        public ServiceConnection(string baseUrl)
+        {
+            _httpClient = new HttpClient();
+            _baseUrl = baseUrl.TrimEnd('/');
+        }
 
-    public async Task<HttpResponseMessage> CallServicePost(string url, StringContent postJson)
-    {
-        return await _httpClient.PostAsync(url, postJson);
-    }
+        public Task<HttpResponseMessage> CallServiceGet(string uri)
+        {
+            return _httpClient.GetAsync($"{_baseUrl}/{uri}");
+        }
 
-    public async Task<HttpResponseMessage> CallServicePut(string url, StringContent postJson)
-    {
-        return await _httpClient.PutAsync(url, postJson);
-    }
+        public Task<HttpResponseMessage> CallServicePost(string uri, HttpContent content)
+        {
+            return _httpClient.PostAsync($"{_baseUrl}/{uri}", content);
+        }
 
-    public async Task<HttpResponseMessage> CallServiceDelete(string url)
-    {
-        return await _httpClient.DeleteAsync(url);
+        public Task<HttpResponseMessage> CallServicePut(string uri, HttpContent content)
+        {
+            return _httpClient.PutAsync($"{_baseUrl}/{uri}", content);
+        }
+
+        public Task<HttpResponseMessage> CallServiceDelete(string uri)
+        {
+            return _httpClient.DeleteAsync($"{_baseUrl}/{uri}");
+        }
     }
 }

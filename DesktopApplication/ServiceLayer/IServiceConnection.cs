@@ -1,12 +1,13 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace DesktopApplication.ServiceLayer;
-
-public interface IServiceConnection
+namespace DesktopApplication.ServiceLayer
 {
-    Task<HttpResponseMessage> CallServiceGet(string url);
-    Task<HttpResponseMessage> CallServicePost(string url, StringContent postJson);
-    Task<HttpResponseMessage> CallServicePut(string url, StringContent postJson);
-    Task<HttpResponseMessage> CallServiceDelete(string url);
+    public interface IServiceConnection
+    {
+        Task<HttpResponseMessage> CallServiceGet(string uri);
+        Task<HttpResponseMessage> CallServicePost(string uri, HttpContent content);
+        Task<HttpResponseMessage> CallServicePut(string uri, HttpContent content);
+        Task<HttpResponseMessage> CallServiceDelete(string uri);
+    }
 }
