@@ -34,9 +34,14 @@ namespace WebshopAPI.BusinessLogicLayer
             foreach (var orderLine in order.OrderLines)
             {
                 _orderLineDB.Add(orderLine);
-                
+
                 // Update product stock
-                _productDB.UpdateProductStock(orderLine.ProductId, orderLine.Quantity);
+                var product = _productDB.GetById(orderLine.ProductId);
+                if (product == null)
+                {
+                    throw new Exception($"Product with ID {orderLine.ProductId} not found.");
+                }
+                _productDB.UpdateProductStock(orderLine.ProductId, orderLine.Quantity, product.RowVersion);
             }
         }
 

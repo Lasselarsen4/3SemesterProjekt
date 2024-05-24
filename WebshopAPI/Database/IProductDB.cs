@@ -1,5 +1,5 @@
-using ModelAPI;
 using System.Collections.Generic;
+using ModelAPI;
 
 namespace WebshopAPI.Database
 {
@@ -10,6 +10,6 @@ namespace WebshopAPI.Database
         void Add(Product product);
         void Update(Product product);
         void Delete(int id);
-        void UpdateProductStock(int productId, int quantity); // Added method signature
+        void UpdateProductStock(int productId, int quantity, byte[] rowVersion); // Add this method
     }
 }
