@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using WebshopApplication.Models;
 using WebshopApplication.ServiceLayer;
 
@@ -95,8 +92,7 @@ namespace WebshopApplication.Controllers
                     }
                 }
             }
-
-            // Always clear the cart regardless of the outcome
+            
             _cartService.ClearCart();
 
             // Redirect to OrderConfirmation

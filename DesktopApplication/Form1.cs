@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using DesktopApplication.Models;
 using DesktopApplication.ServiceLayer;
 
@@ -14,7 +10,7 @@ namespace DesktopApplication
         public Form1()
         {
             InitializeComponent();
-            var serviceConnection = new ServiceConnection("http://localhost:5042/api/"); // Adjusted base URL
+            var serviceConnection = new ServiceConnection("http://localhost:5042/api/");
             _productService = new ProductService(serviceConnection);
         }
 

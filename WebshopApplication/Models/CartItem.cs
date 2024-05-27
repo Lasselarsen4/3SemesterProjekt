@@ -7,7 +7,7 @@ public class CartItem
     public decimal ProductPrice { get; set; }
     public int Quantity { get; set; }
 
-    public CartItem() { } // Parameterless constructor
+    public CartItem() { }
 
     public CartItem(int productId, string productName, decimal productPrice, int quantity)
     {

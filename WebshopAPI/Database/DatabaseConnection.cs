@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -33,7 +32,7 @@ namespace WebshopAPI.Database
                 catch (SqlException e)
                 {
                     LogError(e);
-                    throw; // Rethrow the exception after logging
+                    throw;
                 }
             }
             return _connection;
@@ -51,12 +50,10 @@ namespace WebshopAPI.Database
 
         private void LogError(SqlException exception)
         {
-            // Logging the error to the console for now, consider using a logging framework
             Console.Error.WriteLine($"Could not connect to database {_databaseName} @ {_serverAddress}:{_serverPort} as user {_userName} using password ****");
             Console.WriteLine(exception.ToString());
         }
-
-        // Implement IDisposable to ensure proper disposal
+        
         public void Dispose()
         {
             CloseConnection();

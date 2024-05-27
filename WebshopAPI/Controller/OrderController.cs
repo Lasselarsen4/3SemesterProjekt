@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using ModelAPI;
-using WebshopAPI.BusinessLogicLayer;
-using System;
-using System.Collections.Generic;
 
 namespace WebshopAPI.Controller
 {
@@ -29,7 +26,7 @@ namespace WebshopAPI.Controller
             {
                 foreach (var orderLine in order.OrderLines)
                 {
-                    // Validate order line if necessary
+                    
                 }
 
                 _orderLogic.PlaceOrder(order);

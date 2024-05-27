@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ModelAPI;
+﻿using ModelAPI;
 using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer

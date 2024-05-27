@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using WebshopApplication.Models;
+﻿using WebshopApplication.Models;
 
 namespace WebshopApplication.ServiceLayer
 {

@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using WebshopApplication.Models;
 using WebshopApplication.BusinessLogicLayerWeb;
-using Microsoft.Extensions.Configuration;
 
 namespace WebshopApplication.Controllers
 {
@@ -15,16 +13,14 @@ namespace WebshopApplication.Controllers
         {
             _orderLineLogic = new OrderLineLogic(configuration);
         }
-
-        // GET: /OrderLine
+        
         [HttpGet]
         public async Task<IActionResult> Index(string sortParam)
         {
             var orderLines = await _orderLineLogic.GetOrderLines(sortParam);
             return View(orderLines);
         }
-
-        // GET: /OrderLine/Details/5
+        
         [HttpGet("Details/{orderId}/{productId}")]
         public async Task<IActionResult> Details(int orderId, int productId)
         {
@@ -35,15 +31,13 @@ namespace WebshopApplication.Controllers
             }
             return View(orderLine);
         }
-
-        // GET: /OrderLine/Create
+        
         [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
-
-        // POST: /OrderLine/Create
+        
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderLine orderLine)
@@ -57,8 +51,7 @@ namespace WebshopApplication.Controllers
             }
             return View(orderLine);
         }
-
-        // GET: /OrderLine/Edit/5
+        
         [HttpGet("Edit/{orderId}/{productId}")]
         public async Task<IActionResult> Edit(int orderId, int productId)
         {

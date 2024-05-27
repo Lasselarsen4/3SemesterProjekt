@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using WebshopApplication.ServiceLayer;
+﻿using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.Middleware
 {
@@ -19,11 +17,9 @@ namespace WebshopApplication.Middleware
         {
             var cartItems = _cartService.GetCartItems().ToList();
             var cartItemCount = cartItems.Sum(item => item.Quantity);
-
-            // Set the cart item count in HttpContext.Items
+            
             context.Items["CartItemCount"] = cartItemCount;
-
-            // Call the next middleware in the pipeline
+            
             await _next(context);
         }
     }

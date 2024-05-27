@@ -45,8 +45,7 @@
     <div class="total-price">
         <h4>Total Price: @ViewBag.TotalPrice.ToString("C")</h4>
     </div>
-
-    <!-- Checkout Button -->
+    
     <a asp-action="Checkout" class="btn btn-primary @(Model.IsCartEmpty ? "disabled" : "")">
         Checkout
     </a>
@@ -56,5 +55,4 @@ else
     <p class="text-danger">Your cart is empty. Add items to the cart to proceed.</p>
 }
 
-<!-- Back to Products Button -->
 <a asp-action="Index" asp-controller="Product" class="btn btn-secondary">Back to Products</a>

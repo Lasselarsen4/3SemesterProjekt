@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using WebshopAPI.BusinessLogicLayer;
-using WebshopAPI.Database;
 using ModelAPI;
 
 namespace WebshopAPI.Controller

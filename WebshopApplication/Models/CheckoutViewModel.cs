@@ -1,5 +1,4 @@
-﻿using System.Collections;
-
+﻿
 namespace WebshopApplication.Models
 {
     public class CheckoutViewModel

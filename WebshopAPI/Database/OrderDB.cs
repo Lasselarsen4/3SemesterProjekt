@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using ModelAPI;
 
 namespace WebshopAPI.Database
@@ -37,8 +35,7 @@ namespace WebshopAPI.Database
                         orders.Add(order);
                     }
                 }
-
-                // Retrieve order lines for all orders
+                
                 foreach (var order in orders)
                 {
                     order.OrderLines = GetOrderLinesByOrderId(order.OrderId, connection);

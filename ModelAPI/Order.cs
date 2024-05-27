@@ -1,4 +1,4 @@
-﻿// Order.cs
+﻿
 namespace ModelAPI
 {
     public class Order

@@ -1,9 +1,5 @@
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using WebshopApplication.Models;
 
 namespace WebshopApplication.ServiceLayer

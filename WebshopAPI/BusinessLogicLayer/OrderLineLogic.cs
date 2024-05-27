@@ -1,6 +1,4 @@
 ﻿using ModelAPI;
-using System;
-using System.Collections.Generic;
 using WebshopAPI.Database;
 
 namespace WebshopAPI.BusinessLogicLayer
@@ -31,8 +29,6 @@ namespace WebshopAPI.BusinessLogicLayer
                 throw new ArgumentNullException(nameof(orderLine));
             }
 
-            // Optionally, you can validate the order line here before adding it.
-
             _orderLineDB.Add(orderLine);
         }
 
@@ -42,13 +38,12 @@ namespace WebshopAPI.BusinessLogicLayer
             {
                 throw new ArgumentNullException(nameof(updatedOrderLine));
             }
-
-            // Optionally, you can validate the updated order line here before updating it.
+            
 
             _orderLineDB.Update(orderId, productId, updatedOrderLine);
         }
 
-        public void DeleteOrderLine(int orderId, int productId)  // Implementing the missing method
+        public void DeleteOrderLine(int orderId, int productId)
         {
             _orderLineDB.Delete(orderId, productId);
         }

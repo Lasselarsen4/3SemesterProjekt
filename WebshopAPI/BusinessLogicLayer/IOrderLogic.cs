@@ -1,5 +1,4 @@
-﻿// IOrderLogic.cs
-using ModelAPI;
+﻿using ModelAPI;
 
 public interface IOrderLogic
 {
