@@ -54,7 +54,7 @@ namespace WebshopApplication.ServiceLayer
             return response != null && response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateOrderLine(OrderLine orderLine)
+        public async Task<bool> UpdateOrderLine(int orderId, int productId, OrderLine orderLine)
         {
             _serviceConnection.UseUrl = $"{_serviceConnection.BaseUrl}/orderline/{orderLine.OrderId}/{orderLine.ProductId}";
 

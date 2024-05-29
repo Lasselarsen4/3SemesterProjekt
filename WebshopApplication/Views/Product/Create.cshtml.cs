@@ -1,18 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using WebshopApplication.Models;
-using System;
-using WebshopApplication.BusinessLogicLayerWeb;
+using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.Views.Product
 {
     public class Create : PageModel
     {
-        private readonly ProductLogic _productLogic;
+        private readonly ProductService _productService;
 
-        public Create(ProductLogic productLogic)
+        public Create(ProductService productService)
         {
-            _productLogic = productLogic;
+            _productService = productService;
         }
 
         [BindProperty]
@@ -32,7 +30,7 @@ namespace WebshopApplication.Views.Product
 
             try
             {
-                await _productLogic.InsertProduct(Product);
+                await _productService.SaveProduct(Product);
                 return RedirectToPage("/Product/Index");
             }
             catch (Exception ex)

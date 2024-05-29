@@ -1,30 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
 using WebshopApplication.Models;
-using WebshopApplication.BusinessLogicLayerWeb;
+using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.Controllers
 {
     [Route("[controller]")]
     public class CustomerController : Controller
     {
-        private readonly CustomerLogic _customerLogic;
+        private readonly ICustomerService _customerService;
 
         public CustomerController(IConfiguration configuration)
         {
-            _customerLogic = new CustomerLogic(configuration);
+            _customerService = new CustomerService(configuration);
         }
         
         [HttpGet]
         public async Task<IActionResult> Index(string sortParam)
         {
-            var customers = await _customerLogic.GetCustomers(sortParam);
+            var customers = await _customerService.GetCustomers(sortParam);
             return View(customers);
         }
         
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var customer = await _customerLogic.GetCustomerById(id);
+            var customer = await _customerService.GetCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -44,7 +44,7 @@ namespace WebshopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _customerLogic.InsertCustomer(customer))
+                if (await _customerService.SaveCustomer(customer))
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -55,7 +55,7 @@ namespace WebshopApplication.Controllers
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            var customer = await _customerLogic.GetCustomerById(id);
+            var customer = await _customerService.GetCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -74,7 +74,7 @@ namespace WebshopApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                if (await _customerLogic.UpdateCustomer(customer))
+                if (await _customerService.UpdateCustomer(customer))
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -85,7 +85,7 @@ namespace WebshopApplication.Controllers
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var customer = await _customerLogic.GetCustomerById(id);
+            var customer = await _customerService.GetCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -97,7 +97,7 @@ namespace WebshopApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _customerLogic.DeleteCustomer(id))
+            if (await _customerService.DeleteCustomer(id))
             {
                 return RedirectToAction(nameof(Index));
             }

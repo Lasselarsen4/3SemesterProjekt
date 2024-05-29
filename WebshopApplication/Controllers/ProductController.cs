@@ -1,30 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebshopApplication.Models;
-using WebshopApplication.BusinessLogicLayerWeb;
+using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.Controllers
 {
     [Route("[controller]")]
     public class ProductController : Controller
     {
-        private readonly IProductLogic _productLogic;
+        private readonly IProductService _productService;
 
         public ProductController(IConfiguration configuration)
         {
-            _productLogic = new ProductLogic(configuration);
+            _productService = new ProductService(configuration);
         }
         
         [HttpGet]
         public async Task<IActionResult> Index(string sortParam)
         {
-            var products = await _productLogic.GetProducts(sortParam);
+            var products = await _productService.GetProducts(sortParam);
             return View(products);
         }
         
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var product = await _productLogic.GetProductById(id);
+            var product = await _productService.GetById(id);
             if (product == null)
             {
                 return NotFound();
@@ -44,7 +44,7 @@ namespace WebshopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _productLogic.InsertProduct(product))
+                if (await _productService.SaveProduct(product))
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -55,7 +55,7 @@ namespace WebshopApplication.Controllers
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            var product = await _productLogic.GetProductById(id);
+            var product = await _productService.GetById(id);
             if (product == null)
             {
                 return NotFound();
@@ -74,7 +74,7 @@ namespace WebshopApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                if (await _productLogic.UpdateProduct(product))
+                if (await _productService.UpdateProduct(product))
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -85,7 +85,7 @@ namespace WebshopApplication.Controllers
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _productLogic.GetProductById(id);
+            var product = await _productService.GetById(id);
             if (product == null)
             {
                 return NotFound();
@@ -97,7 +97,7 @@ namespace WebshopApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _productLogic.DeleteProduct(id))
+            if (await _productService.DeleteProduct(id))
             {
                 return RedirectToAction(nameof(Index));
             }

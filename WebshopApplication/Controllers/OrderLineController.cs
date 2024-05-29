@@ -1,35 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
 using WebshopApplication.Models;
-using WebshopApplication.BusinessLogicLayerWeb;
+using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.Controllers
 {
     [Route("[controller]")]
     public class OrderLineController : Controller
     {
-        private readonly OrderLineLogic _orderLineLogic;
+        private readonly IOrderLineService _orderLineService;
 
         public OrderLineController(IConfiguration configuration)
         {
-            _orderLineLogic = new OrderLineLogic(configuration);
+            _orderLineService = new OrderLineService(configuration);
         }
         
         [HttpGet]
         public async Task<IActionResult> Index(string sortParam)
         {
-            var orderLines = await _orderLineLogic.GetOrderLines(sortParam);
+            var orderLines = await _orderLineService.GetOrderLines(sortParam);
             return View(orderLines);
-        }
-        
-        [HttpGet("Details/{orderId}/{productId}")]
-        public async Task<IActionResult> Details(int orderId, int productId)
-        {
-            var orderLine = await _orderLineLogic.GetOrderLineById(orderId, productId);
-            if (orderLine == null)
-            {
-                return NotFound();
-            }
-            return View(orderLine);
         }
         
         [HttpGet("Create")]
@@ -44,7 +33,7 @@ namespace WebshopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _orderLineLogic.InsertOrderLine(orderLine))
+                if (await _orderLineService.SaveOrderLine(orderLine))
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -52,16 +41,6 @@ namespace WebshopApplication.Controllers
             return View(orderLine);
         }
         
-        [HttpGet("Edit/{orderId}/{productId}")]
-        public async Task<IActionResult> Edit(int orderId, int productId)
-        {
-            var orderLine = await _orderLineLogic.GetOrderLineById(orderId, productId);
-            if (orderLine == null)
-            {
-                return NotFound();
-            }
-            return View(orderLine);
-        }
 
         [HttpPost("Edit/{orderId}/{productId}")]
         [ValidateAntiForgeryToken]
@@ -74,30 +53,20 @@ namespace WebshopApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                if (await _orderLineLogic.UpdateOrderLine(orderId, productId, orderLine))
+                if (await _orderLineService.UpdateOrderLine(orderId, productId, orderLine))
                 {
                     return RedirectToAction(nameof(Index));
                 }
             }
             return View(orderLine);
         }
-
-        [HttpGet("Delete/{orderId}/{productId}")]
-        public async Task<IActionResult> Delete(int orderId, int productId)
-        {
-            var orderLine = await _orderLineLogic.GetOrderLineById(orderId, productId);
-            if (orderLine == null)
-            {
-                return NotFound();
-            }
-            return View(orderLine);
-        }
+        
 
         [HttpPost("Delete/{orderId}/{productId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int orderId, int productId)
         {
-            if (await _orderLineLogic.DeleteOrderLine(orderId, productId))
+            if (await _orderLineService.DeleteOrderLine(orderId, productId))
             {
                 return RedirectToAction(nameof(Index));
             }

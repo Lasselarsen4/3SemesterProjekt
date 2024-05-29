@@ -1,34 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
-using WebshopApplication.BusinessLogicLayerWeb;
 using WebshopApplication.Models;
+using WebshopApplication.ServiceLayer;
 
 namespace WebshopApplication.Controllers
 {
     [Route("[controller]")]
     public class OrderController : Controller
     {
-        private readonly OrderLogic _orderLogic;
+        private readonly IOrderService _orderService;
+        private readonly ICustomerService _customerService;
 
-        public OrderController(IConfiguration configuration)
+        public OrderController(IOrderService orderService, ICustomerService customerService)
         {
-            _orderLogic = new OrderLogic(configuration);
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
+            _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         }
         
         [HttpGet]
         public async Task<IActionResult> Index(string sortParam)
         {
-            var orders = await _orderLogic.GetOrders(sortParam);
+            var orders = await _orderService.GetOrders(sortParam);
             return View(orders);
         }
         
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var order = await _orderLogic.GetOrderById(id);
+            var order = await _orderService.GetOrderById(id);
             if (order == null)
             {
                 return NotFound();
             }
+
+            order.Cust = await _customerService.GetCustomerById(order.CustomerId);
+
             return View(order);
         }
         
@@ -44,7 +49,7 @@ namespace WebshopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _orderLogic.InsertOrder(order))
+                if (await _orderService.SaveOrder(order))
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -55,7 +60,7 @@ namespace WebshopApplication.Controllers
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            var order = await _orderLogic.GetOrderById(id);
+            var order = await _orderService.GetOrderById(id);
             if (order == null)
             {
                 return NotFound();
@@ -74,7 +79,7 @@ namespace WebshopApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                if (await _orderLogic.UpdateOrder(order))
+                if (await _orderService.UpdateOrder(order))
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -85,7 +90,7 @@ namespace WebshopApplication.Controllers
         [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var order = await _orderLogic.GetOrderById(id);
+            var order = await _orderService.GetOrderById(id);
             if (order == null)
             {
                 return NotFound();
@@ -97,7 +102,7 @@ namespace WebshopApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _orderLogic.DeleteOrder(id))
+            if (await _orderService.DeleteOrder(id))
             {
                 return RedirectToAction(nameof(Index));
             }
